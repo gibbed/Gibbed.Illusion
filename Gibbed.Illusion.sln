@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.FileFormats", "Gibbed.Illusion.FileFormats\Gibbed.Illusion.FileFormats.csproj", "{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.Test", "Gibbed.Illusion.Test\Gibbed.Illusion.Test.csproj", "{A0A1E860-2E9D-4921-B186-27DDC575416F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Helpers", "Gibbed.Helpers\Gibbed.Helpers.csproj", "{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A0A1E860-2E9D-4921-B186-27DDC575416F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A0A1E860-2E9D-4921-B186-27DDC575416F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0A1E860-2E9D-4921-B186-27DDC575416F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A0A1E860-2E9D-4921-B186-27DDC575416F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
