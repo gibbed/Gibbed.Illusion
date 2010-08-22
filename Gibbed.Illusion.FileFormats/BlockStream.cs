@@ -191,10 +191,13 @@ namespace Gibbed.Illusion.FileFormats
                 offset = this.CurrentOffset + offset;
             }
 
+            /*
+            :effort: in fixing seeks that hit the end of data instead of over it
             if (this.LoadBlock(offset) == false)
             {
                 throw new InvalidOperationException();
             }
+            */
 
             this.CurrentOffset = offset;
             return this.CurrentOffset;

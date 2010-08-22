@@ -7,7 +7,7 @@ namespace Gibbed.Illusion.FileFormats
 {
 	public static class FNV32
 	{
-        private const uint InitialHash = 0x811C9DC5;
+        public const uint InitialHash = 0x811C9DC5;
 
         public static uint Hash(byte[] buffer, int offset, int count)
         {

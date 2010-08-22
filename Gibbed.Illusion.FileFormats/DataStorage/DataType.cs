@@ -2,25 +2,27 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
     public class DataType
     {
-        public uint Unknown0;
-        public string Unknown1;
+        public uint Id;
+        public string Name;
         public uint Unknown2;
 
-        public void Deserialize(SdsStream input)
+        public void Deserialize(Stream input, bool littleEndian)
         {
-            this.Unknown0 = input.ReadValueU32();
-            uint length = input.ReadValueU32();
+            this.Id = input.ReadValueU32(littleEndian);
+            uint length = input.ReadValueU32(littleEndian);
             if (length > 0x3FF)
             {
                 throw new InvalidOperationException();
             }
-            this.Unknown1 = input.ReadString(length);
-            this.Unknown2 = input.ReadValueU32();
+            this.Name = input.ReadStringASCII(length);
+            this.Unknown2 = input.ReadValueU32(littleEndian);
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
+using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
@@ -15,15 +17,15 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
         public uint Unknown12;
         public uint Unknown16;
 
-        public void Deserialize(SdsStream input)
+        public void Deserialize(Stream input, bool littleEndian)
         {
-            this.Unknown00 = input.ReadValueU32();
-            this.Unknown04 = input.ReadValueU32();
-            this.Unknown08 = input.ReadValueU16();
-            this.Unknown0A = input.ReadValueU32();
-            this.Unknown0E = input.ReadValueU32();
-            this.Unknown12 = input.ReadValueU32();
-            this.Unknown16 = input.ReadValueU32();
+            this.Unknown00 = input.ReadValueU32(littleEndian);
+            this.Unknown04 = input.ReadValueU32(littleEndian);
+            this.Unknown08 = input.ReadValueU16(littleEndian);
+            this.Unknown0A = input.ReadValueU32(littleEndian);
+            this.Unknown0E = input.ReadValueU32(littleEndian);
+            this.Unknown12 = input.ReadValueU32(littleEndian);
+            this.Unknown16 = input.ReadValueU32(littleEndian);
         }
     }
 }

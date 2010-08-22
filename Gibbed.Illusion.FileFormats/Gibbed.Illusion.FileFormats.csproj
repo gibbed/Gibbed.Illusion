@@ -51,15 +51,14 @@
   <ItemGroup>
     <Compile Include="BlockStream.cs" />
     <Compile Include="DataStorage\BlockInfo.cs" />
-    <Compile Include="DataStorage\BlockCompressionInfo.cs" />
+    <Compile Include="DataStorage\CompressedBlockInfo.cs" />
     <Compile Include="DataStorage\FileInfo.cs" />
     <Compile Include="DataStorage\DataType.cs" />
     <Compile Include="DataStorage\ArchiveInfo.cs" />
     <Compile Include="FNV32.cs" />
-    <Compile Include="DataStorage\Header.cs" />
-    <Compile Include="SdsFile.cs" />
+    <Compile Include="SdsReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SdsStream.cs" />
+    <Compile Include="StreamHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Gibbed.Helpers\Gibbed.Helpers.csproj">
