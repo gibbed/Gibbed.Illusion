@@ -285,10 +285,6 @@ namespace Gibbed.Illusion.FileFormats
                     return 0;
                 }
 
-                if (baseOffset == 8454142)
-                {
-                }
-
                 this.Load(input);
 
                 int relativeOffset = (int)(baseOffset - this.Offset);
@@ -356,10 +352,6 @@ namespace Gibbed.Illusion.FileFormats
                 if (baseOffset >= this.Offset + this.Size)
                 {
                     return 0;
-                }
-
-                if (baseOffset == 8454142)
-                {
                 }
 
                 this.Load(input);
