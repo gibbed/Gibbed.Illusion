@@ -11,29 +11,29 @@ namespace Gibbed.Illusion.FileFormats
     public class SdsReader
     {
         private string Platform;
-        private Stream FileStreamXX;
-        private BlockStream BlockStreamXX;
+        private Stream FileStream;
+        private BlockStream BlockStream;
 
         private List<DataStorage.DataType> DataTypes =
             new List<DataStorage.DataType>();
 
         public SdsReader()
         {
-            this.FileStreamXX = null;
-            this.BlockStreamXX = null;
+            this.FileStream = null;
+            this.BlockStream = null;
         }
 
         public bool Open(string path)
         {
-            if (this.BlockStreamXX != null)
+            if (this.BlockStream != null)
             {
-                this.BlockStreamXX.FreeLoadedBlocks();
-                this.BlockStreamXX = null;
+                this.BlockStream.FreeLoadedBlocks();
+                this.BlockStream = null;
             }
 
-            if (this.FileStreamXX != null)
+            if (this.FileStream != null)
             {
-                this.FileStreamXX.Close();
+                this.FileStream.Close();
             }
 
             var input = File.Open(
@@ -49,8 +49,8 @@ namespace Gibbed.Illusion.FileFormats
 
         public void Close()
         {
-            this.BlockStreamXX.FreeLoadedBlocks();
-            this.FileStreamXX.Close();
+            this.BlockStream.FreeLoadedBlocks();
+            this.FileStream.Close();
         }
 
         private void Initialize(Stream input)
