@@ -171,20 +171,22 @@ namespace Gibbed.Illusion.FileFormats
             }
 
             // file info
-            List<long> fileOffsets = new List<long>();
+            var fileInfos = new Dictionary<long, DataStorage.FileInfo>();
             blockStream.Seek(0, SeekOrigin.Begin);
 
             for (uint i = 0; i < info.FileCount; i++)
             {
                 var position = blockStream.Position;
-                fileOffsets.Add(position);
                 var memory = blockStream.ReadToMemoryStreamSafe(26, littleEndian);
 
                 var fileInfo = new DataStorage.FileInfo();
                 fileInfo.Deserialize(memory, littleEndian);
+                fileInfos.Add(position, fileInfo);
 
-                blockStream.Seek(position + fileInfo.Unknown04, SeekOrigin.Begin);
+                blockStream.Seek(position + fileInfo.Size, SeekOrigin.Begin);
             }
+
+            var zomg = fileInfos.Where(kvp => kvp.Value.Unknown08 == 1);
         }
     }
 }

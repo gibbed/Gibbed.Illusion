@@ -9,23 +9,23 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
 {
     public class FileInfo
     {
-        public uint Unknown00;
-        public uint Unknown04;
-        public ushort Unknown08;
-        public uint Unknown0A;
-        public uint Unknown0E;
-        public uint Unknown12;
-        public uint Unknown16;
+        public uint TypeId;
+        public uint Size; // includes headers (such as the first 30 bytes)
+        public ushort Unknown08; // seems to indicate extra headers
+        public uint SlotRamRequired;
+        public uint SlotVramRequired;
+        public uint OtherRamRequired;
+        public uint OtherVramRequired;
 
         public void Deserialize(Stream input, bool littleEndian)
         {
-            this.Unknown00 = input.ReadValueU32(littleEndian);
-            this.Unknown04 = input.ReadValueU32(littleEndian);
+            this.TypeId = input.ReadValueU32(littleEndian);
+            this.Size = input.ReadValueU32(littleEndian);
             this.Unknown08 = input.ReadValueU16(littleEndian);
-            this.Unknown0A = input.ReadValueU32(littleEndian);
-            this.Unknown0E = input.ReadValueU32(littleEndian);
-            this.Unknown12 = input.ReadValueU32(littleEndian);
-            this.Unknown16 = input.ReadValueU32(littleEndian);
+            this.SlotRamRequired = input.ReadValueU32(littleEndian);
+            this.SlotVramRequired = input.ReadValueU32(littleEndian);
+            this.OtherRamRequired = input.ReadValueU32(littleEndian);
+            this.OtherVramRequired = input.ReadValueU32(littleEndian);
         }
     }
 }

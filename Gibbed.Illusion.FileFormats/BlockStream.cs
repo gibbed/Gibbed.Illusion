@@ -162,13 +162,11 @@ namespace Gibbed.Illusion.FileFormats
                     this.BaseStream,
                     this.CurrentOffset,
                     buffer,
-                    offset,
-                    count);
+                    offset + totalRead,
+                    count - totalRead);
 
                 totalRead += read;
                 this.CurrentOffset += read;
-                offset += read;
-                count -= read;
             }
 
             return totalRead;
@@ -287,6 +285,10 @@ namespace Gibbed.Illusion.FileFormats
                     return 0;
                 }
 
+                if (baseOffset == 8454142)
+                {
+                }
+
                 this.Load(input);
 
                 int relativeOffset = (int)(baseOffset - this.Offset);
@@ -354,6 +356,10 @@ namespace Gibbed.Illusion.FileFormats
                 if (baseOffset >= this.Offset + this.Size)
                 {
                     return 0;
+                }
+
+                if (baseOffset == 8454142)
+                {
                 }
 
                 this.Load(input);
