@@ -56,6 +56,7 @@
     <Compile Include="DataStorage\DataType.cs" />
     <Compile Include="DataStorage\ArchiveInfo.cs" />
     <Compile Include="FNV32.cs" />
+    <Compile Include="SdsConfigFile.cs" />
     <Compile Include="SdsReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamHelpers.cs" />
