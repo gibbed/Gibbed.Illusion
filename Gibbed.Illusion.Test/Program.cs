@@ -16,6 +16,14 @@ namespace Gibbed.Illusion.Test
                 var sds = new FileFormats.SdsReader();
                 sds.Open("tables.sds");
             }
+
+            /*
+            using (var input = File.OpenRead("sdsconfig.bin"))
+            {
+                var config = new FileFormats.SdsConfigFile();
+                config.Deserialize(input);
+            }
+            */
         }
     }
 }

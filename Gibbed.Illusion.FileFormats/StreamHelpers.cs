@@ -13,7 +13,7 @@ namespace Gibbed.Illusion.FileFormats
         {
             MemoryStream memory = new MemoryStream();
 
-            uint myHash = FNV32.InitialHash;
+            uint myHash = FNV.InitialHash32;
 
             long left = size;
             byte[] data = new byte[4096];
@@ -21,7 +21,7 @@ namespace Gibbed.Illusion.FileFormats
             {
                 int block = (int)(Math.Min(left, 4096));
                 stream.Read(data, 0, block);
-                myHash = FNV32.Hash(data, 0, block);
+                myHash = FNV.Hash32(data, 0, block);
                 memory.Write(data, 0, block);
                 left -= block;
             }
