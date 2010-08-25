@@ -17,6 +17,17 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
         public uint OtherRamRequired;
         public uint OtherVramRequired;
 
+        public void Serialize(Stream output, bool littleEndian)
+        {
+            output.WriteValueU32(this.TypeId, littleEndian);
+            output.WriteValueU32(this.Size, littleEndian);
+            output.WriteValueU16(this.Unknown08, littleEndian);
+            output.WriteValueU32(this.SlotRamRequired, littleEndian);
+            output.WriteValueU32(this.SlotVramRequired, littleEndian);
+            output.WriteValueU32(this.OtherRamRequired, littleEndian);
+            output.WriteValueU32(this.OtherVramRequired, littleEndian);
+        }
+
         public void Deserialize(Stream input, bool littleEndian)
         {
             this.TypeId = input.ReadValueU32(littleEndian);

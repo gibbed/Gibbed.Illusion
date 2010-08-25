@@ -12,6 +12,7 @@ namespace Gibbed.Illusion.FileFormats
     {
         private string Platform;
         private Stream FileStream;
+        private Stream DataStream;
         private BlockStream BlockStream;
 
         private List<DataStorage.DataType> DataTypes =
@@ -55,6 +56,18 @@ namespace Gibbed.Illusion.FileFormats
 
         private void Initialize(Stream input)
         {
+            if (input.Length >= (0x90 + 15))
+            {
+                input.Seek(0x90, SeekOrigin.Begin);
+                byte[] fsfh = new byte[15];
+                input.Read(fsfh, 0, fsfh.Length);
+
+                // "tables/fsfh.bin"
+                if (FNV.Hash64(fsfh, 0, fsfh.Length) == 0x39DD22E69C74EC6F)
+                {
+                    // TODO: decrypt SDS to DataStream
+                }
+            }
 
             bool littleEndian;
             {
