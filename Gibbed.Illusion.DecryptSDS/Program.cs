@@ -85,22 +85,16 @@ namespace Gibbed.Illusion.DecryptSDS
 
                 input.Seek(0x10000, SeekOrigin.Begin);
 
-                uint[] keys = new uint[] { 0x73766E46, 0x6D454D5A, 0x336A6D68, 0x38425072 };
-                TeaSetup setup = null;
-                TeaSetup[] setups = new TeaSetup[]
-                {
-                    new TeaSetup(0x79FB0B01, 0x4B989BCD, 5),
-                    new TeaSetup(0xA62336C0, 0x9D3119B6, 32),
-                };
+                FileFormats.TEA.Setup setup = null;
 
                 byte[] header = new byte[8];
                 input.Read(header, 0, header.Length);
 
                 byte[] decrypted = new byte[8];
-                foreach (var current in setups)
+                foreach (var current in FileFormats.TEA.Mafia2.Setups)
                 {
                     Array.Copy(header, decrypted, header.Length);
-                    FileFormats.TEA.Decrypt(decrypted, 0, 8, keys, current.Sum, current.Delta, current.Rounds);
+                    FileFormats.TEA.Decrypt(decrypted, 0, 8, FileFormats.TEA.Mafia2.Keys, current.Sum, current.Delta, current.Rounds);
 
                     if (BitConverter.ToUInt32(decrypted, 0) == 0x00534453)
                     {
@@ -128,7 +122,7 @@ namespace Gibbed.Illusion.DecryptSDS
                     {
                         int block = (int)(Math.Min(left, data.Length));
                         input.Read(data, 0, block);
-                        FileFormats.TEA.Decrypt(data, 0, block, keys, setup.Sum, setup.Delta, setup.Rounds);
+                        FileFormats.TEA.Decrypt(data, 0, block, FileFormats.TEA.Mafia2.Keys, setup.Sum, setup.Delta, setup.Rounds);
                         output.Write(data, 0, block);
                         left -= block;
                     }

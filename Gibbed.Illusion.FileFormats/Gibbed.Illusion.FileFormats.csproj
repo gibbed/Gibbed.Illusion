@@ -50,11 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlockStream.cs" />
-    <Compile Include="DataStorage\BlockInfo.cs" />
-    <Compile Include="DataStorage\CompressedBlockInfo.cs" />
-    <Compile Include="DataStorage\FileInfo.cs" />
-    <Compile Include="DataStorage\DataType.cs" />
-    <Compile Include="DataStorage\ArchiveInfo.cs" />
+    <Compile Include="DataStorage\CompressedBlockHeader.cs" />
+    <Compile Include="DataStorage\FileHeader.cs" />
+    <Compile Include="DataStorage\ArchiveHeader.cs" />
+    <Compile Include="DataStorage\ResourceType.cs" />
     <Compile Include="FNV.cs" />
     <Compile Include="SdsConfigFile.cs" />
     <Compile Include="SdsReader.cs" />

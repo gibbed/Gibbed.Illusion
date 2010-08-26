@@ -7,14 +7,39 @@ namespace Gibbed.Illusion.FileFormats
 {
     public static class TEA
     {
-        /* /sds/tables/tables.sds
-         * sum = 0xA62336C0
-         * delta = 0x9D3119B6
-         * rounds = 32 */
+        public class Setup
+        {
+            public uint Sum;
+            public uint Delta;
+            public uint Rounds;
+
+            public Setup(uint sum, uint delta, uint rounds)
+            {
+                this.Sum = sum;
+                this.Delta = delta;
+                this.Rounds = rounds;
+            }
+        }
+
+        public static class Mafia2
+        {
+            public static uint[] Keys = new uint[]
+            {
+                0x73766E46,
+                0x6D454D5A,
+                0x336A6D68,
+                0x38425072,
+            };
+
+            public static Setup[] Setups = new Setup[]
+            {
+                new Setup(0x79FB0B01, 0x4B989BCD, 5),
+                new Setup(0xA62336C0, 0x9D3119B6, 32),
+            };
+        }
+
         public static void Decrypt(uint[] v, uint[] keys, uint sum, uint delta, uint rounds)
         {
-            uint num_rounds = 32;
-
             uint v0 = v[0];
             uint v1 = v[1];
 

@@ -36,5 +36,15 @@ namespace Gibbed.Illusion.FileFormats
             memory.Position = 0;
             return memory;
         }
+
+        public static string ReadStringASCIIU32(this Stream stream)
+        {
+            uint length = stream.ReadValueU32();
+            if (length > 0x3FF)
+            {
+                throw new InvalidOperationException();
+            }
+            return stream.ReadStringASCII(length);
+        }
     }
 }

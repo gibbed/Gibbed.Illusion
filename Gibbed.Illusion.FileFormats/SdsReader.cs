@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
+using System.Xml.XPath;
 using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats
@@ -15,12 +16,18 @@ namespace Gibbed.Illusion.FileFormats
         private Stream DataStream;
         private BlockStream BlockStream;
 
-        private List<DataStorage.DataType> DataTypes =
-            new List<DataStorage.DataType>();
+        public List<DataStorage.ResourceType> ResourceTypes =
+            new List<DataStorage.ResourceType>();
+
+        public string Xml { get; private set; }
+
+        public List<Entry> Entries =
+            new List<Entry>();
 
         public SdsReader()
         {
             this.FileStream = null;
+            this.DataStream = null;
             this.BlockStream = null;
         }
 
@@ -29,7 +36,14 @@ namespace Gibbed.Illusion.FileFormats
             if (this.BlockStream != null)
             {
                 this.BlockStream.FreeLoadedBlocks();
-                this.BlockStream = null;
+            }
+
+            if (this.DataStream != null)
+            {
+                if (this.FileStream != this.DataStream)
+                {
+                    this.DataStream.Close();
+                }
             }
 
             if (this.FileStream != null)
@@ -56,6 +70,8 @@ namespace Gibbed.Illusion.FileFormats
 
         private void Initialize(Stream input)
         {
+            Stream data = input;
+
             if (input.Length >= (0x90 + 15))
             {
                 input.Seek(0x90, SeekOrigin.Begin);
@@ -65,14 +81,65 @@ namespace Gibbed.Illusion.FileFormats
                 // "tables/fsfh.bin"
                 if (FNV.Hash64(fsfh, 0, fsfh.Length) == 0x39DD22E69C74EC6F)
                 {
-                    // TODO: decrypt SDS to DataStream
+                    input.Seek(0x10000, SeekOrigin.Begin);
+
+                    FileFormats.TEA.Setup setup = null;
+
+                    byte[] encryptedHeader = new byte[8];
+                    input.Read(encryptedHeader, 0, encryptedHeader.Length);
+
+                    byte[] decryptedHeader = new byte[8];
+                    foreach (var current in FileFormats.TEA.Mafia2.Setups)
+                    {
+                        Array.Copy(
+                            encryptedHeader,
+                            decryptedHeader,
+                            encryptedHeader.Length);
+
+                        FileFormats.TEA.Decrypt(
+                            decryptedHeader,
+                            0,
+                            8,
+                            FileFormats.TEA.Mafia2.Keys,
+                            current.Sum,
+                            current.Delta,
+                            current.Rounds);
+
+                        if (BitConverter.ToUInt32(decryptedHeader, 0) == 0x00534453)
+                        {
+                            setup = current;
+                            break;
+                        }
+                    }
+
+                    if (setup == null)
+                    {
+                        throw new InvalidOperationException();
+                    }
+
+                    input.Seek(0x10000, SeekOrigin.Begin);
+
+                    data = new MemoryStream();
+
+                    long left = input.Length - input.Position;
+                    byte[] buffer = new byte[0x4000];
+                    while (left > 0)
+                    {
+                        int block = (int)(Math.Min(left, buffer.Length));
+                        input.Read(buffer, 0, block);
+                        FileFormats.TEA.Decrypt(buffer, 0, block, FileFormats.TEA.Mafia2.Keys, setup.Sum, setup.Delta, setup.Rounds);
+                        data.Write(buffer, 0, block);
+                        left -= block;
+                    }
+
+                    data.Position = 0;
                 }
             }
 
             bool littleEndian;
             {
-                input.Seek(8, SeekOrigin.Begin);
-                var platform = input.ReadStringASCII(4, true);
+                data.Seek(8, SeekOrigin.Begin);
+                var platform = data.ReadStringASCII(4, true);
 
                 littleEndian =
                     platform != "XBOX" &&
@@ -80,13 +147,13 @@ namespace Gibbed.Illusion.FileFormats
             }
 
             // header
-            input.Seek(0, SeekOrigin.Begin);
+            data.Seek(0, SeekOrigin.Begin);
             {
-                var header = input.ReadToMemoryStreamSafe(
+                var memory = data.ReadToMemoryStreamSafe(
                     12, littleEndian);
-                var magic = header.ReadStringASCII(4, true);
-                var version = header.ReadValueU32(littleEndian);
-                var platform = header.ReadStringASCII(4, true);
+                var magic = memory.ReadStringASCII(4, true);
+                var version = memory.ReadValueU32(littleEndian);
+                var platform = memory.ReadStringASCII(4, true);
 
                 if (magic != "SDS")
                 {
@@ -101,31 +168,52 @@ namespace Gibbed.Illusion.FileFormats
                 this.Platform = platform;
             }
 
-            var info = new DataStorage.ArchiveInfo();
-            info.Deserialize(
-                input.ReadToMemoryStreamSafe(52, littleEndian),
+            var archiveHeader = new DataStorage.ArchiveHeader();
+            archiveHeader.Deserialize(
+                data.ReadToMemoryStreamSafe(52, littleEndian),
                 littleEndian);
 
             // data types
-            input.Seek(info.TypeTableOffset, SeekOrigin.Begin);
+            data.Seek(archiveHeader.ResourceTypeTableOffset, SeekOrigin.Begin);
             {
-                uint count = input.ReadValueU32(littleEndian);
-                this.DataTypes.Clear();
+                uint count = data.ReadValueU32(littleEndian);
+                this.ResourceTypes.Clear();
                 for (uint i = 0; i < count; i++)
                 {
-                    var dataType = new DataStorage.DataType();
-                    dataType.Deserialize(input, littleEndian);
-                    this.DataTypes.Add(dataType);
+                    var type = new DataStorage.ResourceType();
+                    type.Deserialize(data, littleEndian);
+                    this.ResourceTypes.Add(type);
+                }
+            }
+
+            // xml
+            data.Seek(archiveHeader.XmlOffset, SeekOrigin.Begin);
+            {
+                var buffer = new byte[data.Length - archiveHeader.XmlOffset];
+                data.Read(buffer, 0, buffer.Length);
+                this.Xml = Encoding.ASCII.GetString(buffer);
+            }
+
+            List<string> descriptions = null;
+            if (this.Xml != null)
+            {
+                descriptions = new List<string>();
+                var doc = new XPathDocument(new StringReader(this.Xml));
+                var nav = doc.CreateNavigator();
+                var nodes = nav.Select("/xml/ResourceInfo/SourceDataDescription");
+                while (nodes.MoveNext() == true)
+                {
+                    descriptions.Add(nodes.Current.Value);
                 }
             }
 
             // data blocks
-            var blockStream = new BlockStream(input);
-            input.Seek(info.BlockTableOffset, SeekOrigin.Begin);
+            var blockStream = new BlockStream(data);
+            data.Seek(archiveHeader.BlockTableOffset, SeekOrigin.Begin);
             {
-                uint magic = input.ReadValueU32(littleEndian);
-                uint alignment = input.ReadValueU32(littleEndian);
-                byte flags = input.ReadValueU8();
+                uint magic = data.ReadValueU32(littleEndian);
+                uint alignment = data.ReadValueU32(littleEndian);
+                byte flags = data.ReadValueU8();
                 // if flags != 4 : see note 1
 
                 if (magic != 0x6C7A4555 || alignment != 0x4000 || flags != 4)
@@ -136,8 +224,8 @@ namespace Gibbed.Illusion.FileFormats
                 long virtualOffset = 0;
                 while (true)
                 {
-                    uint size = input.ReadValueU32(littleEndian);
-                    bool compressed = input.ReadValueU8() != 0;
+                    uint size = data.ReadValueU32(littleEndian);
+                    bool compressed = data.ReadValueU8() != 0;
 
                     if (size == 0)
                     {
@@ -146,8 +234,8 @@ namespace Gibbed.Illusion.FileFormats
 
                     if (compressed == true)
                     {
-                        var compressionInfo = new DataStorage.CompressedBlockInfo();
-                        compressionInfo.Deserialize(input, littleEndian);
+                        var compressionInfo = new DataStorage.CompressedBlockHeader();
+                        compressionInfo.Deserialize(data, littleEndian);
 
                         if (compressionInfo.Unknown04 != 32 ||
                             compressionInfo.Unknown08 != 81920 ||
@@ -164,19 +252,19 @@ namespace Gibbed.Illusion.FileFormats
                         blockStream.AddCompressedBlock(
                             virtualOffset,
                             compressionInfo.UncompressedSize,
-                            input.Position,
+                            data.Position,
                             compressionInfo.CompressedSize);
 
-                        input.Seek(compressionInfo.CompressedSize, SeekOrigin.Current);
+                        data.Seek(compressionInfo.CompressedSize, SeekOrigin.Current);
                     }
                     else
                     {
                         blockStream.AddUncompressedBlock(
                             virtualOffset,
                             size,
-                            input.Position);
+                            data.Position);
 
-                        input.Seek(size, SeekOrigin.Current);
+                        data.Seek(size, SeekOrigin.Current);
                     }
 
                     virtualOffset += alignment;
@@ -184,22 +272,75 @@ namespace Gibbed.Illusion.FileFormats
             }
 
             // file info
-            var fileInfos = new Dictionary<long, DataStorage.FileInfo>();
             blockStream.Seek(0, SeekOrigin.Begin);
-
-            for (uint i = 0; i < info.FileCount; i++)
             {
-                var position = blockStream.Position;
-                var memory = blockStream.ReadToMemoryStreamSafe(26, littleEndian);
+                this.Entries.Clear();
+                for (uint i = 0; i < archiveHeader.FileCount; i++)
+                {
+                    var position = blockStream.Position;
+                    var memory = blockStream.ReadToMemoryStreamSafe(26, littleEndian);
 
-                var fileInfo = new DataStorage.FileInfo();
-                fileInfo.Deserialize(memory, littleEndian);
-                fileInfos.Add(position, fileInfo);
+                    var fileHeader = new DataStorage.FileHeader();
+                    fileHeader.Deserialize(memory, littleEndian);
 
-                blockStream.Seek(position + fileInfo.Size, SeekOrigin.Begin);
+                    string description = descriptions == null ? null : descriptions[(int)i];
+                    if (string.IsNullOrEmpty(description) == true ||
+                        description == "not available")
+                    {
+                        description = string.Format("{0:X8}", position);
+                    }
+
+                    this.Entries.Add(new Entry()
+                        {
+                            Header = fileHeader,
+                            Description = description,
+                            Offset = input.Position,
+                            Size = fileHeader.Size - 30,
+                        });
+
+                    blockStream.Seek(position + fileHeader.Size, SeekOrigin.Begin);
+                }
             }
 
-            var zomg = fileInfos.Where(kvp => kvp.Value.Unknown08 == 1);
+            this.BlockStream = blockStream;
+            this.DataStream = data;
+            this.FileStream = input;
+
+            this.BlockStream.FreeLoadedBlocks();
+        }
+
+        public void ExportData(string outputPath)
+        {
+            using (var output = File.Create(outputPath))
+            {
+                this.BlockStream.SaveUncompressed(output);
+            }
+        }
+
+        public class Entry
+        {
+            internal DataStorage.FileHeader Header;
+            internal long Offset;
+            internal uint Size;
+            public uint TypeId { get { return this.Header.TypeId; } }
+            public string Description { get; internal set; }
+        }
+
+        public void ExportEntry(Entry entry, string outputPath)
+        {
+            using (var output = File.Create(outputPath))
+            {
+                this.BlockStream.Seek(entry.Offset, SeekOrigin.Begin);
+                long left = entry.Size;
+                byte[] buffer = new byte[0x4000];
+                while (left > 0)
+                {
+                    int block = (int)(Math.Min(left, buffer.Length));
+                    this.BlockStream.Read(buffer, 0, block);
+                    output.Write(buffer, 0, block);
+                    left -= block;
+                }
+            }
         }
     }
 }
