@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gibbed.Illusion.ExploreSDS
@@ -18,9 +14,10 @@ namespace Gibbed.Illusion.ExploreSDS
         public ArchiveViewer()
         {
             this.InitializeComponent();
+            this.hintLabel.Text = "";
         }
 
-        public void Load(string path)
+        public void LoadArchive(string path)
         {
             this.Text += string.Format(": {0}", Path.GetFileName(path));
 
@@ -168,6 +165,62 @@ namespace Gibbed.Illusion.ExploreSDS
             if (this.Reader != null)
             {
                 this.Reader.Close();
+            }
+        }
+
+        private void OnSelectEntry(object sender, TreeViewEventArgs e)
+        {
+            if (this.entryTreeView.SelectedNode == null)
+            {
+                this.hintLabel.Text = "";
+                return;
+            }
+
+            var entry = this.entryTreeView.SelectedNode.Tag as
+                FileFormats.SdsReader.Entry;
+            if (entry == null)
+            {
+                this.hintLabel.Text = "";
+                return;
+            }
+
+            this.hintLabel.Text = string.Format("Version {0}, @ 0x{1:X8}, {2} bytes",
+                entry.Header.Version,
+                entry.Offset,
+                entry.Size);
+        }
+
+        private void OnOpenEntry(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (this.entryTreeView.SelectedNode == null)
+            {
+                this.hintLabel.Text = "";
+                return;
+            }
+
+            var entry = this.entryTreeView.SelectedNode.Tag as
+                FileFormats.SdsReader.Entry;
+            if (entry == null)
+            {
+                this.hintLabel.Text = "";
+                return;
+            }
+
+            var type = this.Reader.ResourceTypes.SingleOrDefault(
+                r => r.Id == entry.TypeId);
+            if (type == null)
+            {
+                throw new KeyNotFoundException();
+            }
+
+            if (type.Name == "XML")
+            {
+                var viewer = new XmlViewer()
+                {
+                    MdiParent = this.MdiParent,
+                };
+                viewer.LoadFile(entry.Header, this.Reader.GetEntry(entry));
+                viewer.Show();
             }
         }
     }

@@ -1,17 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
 using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
-    public class ResourceType
+    public class ResourceTypeReference
     {
         public uint Id { get; private set; }
         public string Name { get; private set; }
         public uint Parent { get; private set; }
+
+        public void Serialize(Stream output, bool littleEndian)
+        {
+            output.WriteValueU32(this.Id, littleEndian);
+            output.WriteValueS32(this.Name.Length, littleEndian);
+            output.WriteStringASCII(this.Name);
+            output.WriteValueU32(this.Parent, littleEndian);
+        }
 
         public void Deserialize(Stream input, bool littleEndian)
         {

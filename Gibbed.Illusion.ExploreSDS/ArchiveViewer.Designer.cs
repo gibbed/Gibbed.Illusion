@@ -38,8 +38,11 @@
             this.saveUncompressedDataButton = new System.Windows.Forms.ToolStripButton();
             this.saveRawEntryButton = new System.Windows.Forms.ToolStripButton();
             this.saveRawDialog = new System.Windows.Forms.SaveFileDialog();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.hintLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.entryMenuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // entryTreeView
@@ -51,8 +54,10 @@
             this.entryTreeView.Location = new System.Drawing.Point(0, 25);
             this.entryTreeView.Name = "entryTreeView";
             this.entryTreeView.SelectedImageIndex = 0;
-            this.entryTreeView.Size = new System.Drawing.Size(480, 215);
+            this.entryTreeView.Size = new System.Drawing.Size(480, 193);
             this.entryTreeView.TabIndex = 0;
+            this.entryTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnOpenEntry);
+            this.entryTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnSelectEntry);
             // 
             // entryMenuStrip
             // 
@@ -78,6 +83,9 @@
             this.resourceTypeImageList.Images.SetKeyName(3, "XML");
             this.resourceTypeImageList.Images.SetKeyName(4, "Table");
             this.resourceTypeImageList.Images.SetKeyName(5, "Script");
+            this.resourceTypeImageList.Images.SetKeyName(6, "Texture");
+            this.resourceTypeImageList.Images.SetKeyName(7, "Sound");
+            this.resourceTypeImageList.Images.SetKeyName(8, "Cutscene");
             // 
             // toolStrip
             // 
@@ -114,12 +122,29 @@
             // 
             this.saveRawDialog.Filter = "All Files (*.*)|*.*";
             // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hintLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 218);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(480, 22);
+            this.statusStrip.TabIndex = 2;
+            this.statusStrip.Text = "statusStrip1";
+            // 
+            // hintLabel
+            // 
+            this.hintLabel.Name = "hintLabel";
+            this.hintLabel.Size = new System.Drawing.Size(30, 17);
+            this.hintLabel.Text = "Hint";
+            // 
             // ArchiveViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(480, 240);
             this.Controls.Add(this.entryTreeView);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.Name = "ArchiveViewer";
             this.Text = "Archive";
@@ -127,6 +152,8 @@
             this.entryMenuStrip.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -138,9 +165,11 @@
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton saveUncompressedDataButton;
         private System.Windows.Forms.ImageList resourceTypeImageList;
-        private System.Windows.Forms.ToolStripButton saveRawEntryButton;
         private System.Windows.Forms.ContextMenuStrip entryMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem saveRawToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveRawDialog;
+        private System.Windows.Forms.ToolStripButton saveRawEntryButton;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel hintLabel;
     }
 }

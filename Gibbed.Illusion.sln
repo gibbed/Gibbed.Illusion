@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NDesk.Options", "NDesk.Opti
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.ExploreSDS", "Gibbed.Illusion.ExploreSDS\Gibbed.Illusion.ExploreSDS.csproj", "{CCE32A18-2AB1-4066-9B05-F2B24DAF9613}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.DecompressSDS", "Gibbed.Illusion.DecompressSDS\Gibbed.Illusion.DecompressSDS.csproj", "{C83939E7-713A-4A67-B0E9-B003262EE8DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{CCE32A18-2AB1-4066-9B05-F2B24DAF9613}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CCE32A18-2AB1-4066-9B05-F2B24DAF9613}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CCE32A18-2AB1-4066-9B05-F2B24DAF9613}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C83939E7-713A-4A67-B0E9-B003262EE8DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C83939E7-713A-4A67-B0E9-B003262EE8DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C83939E7-713A-4A67-B0E9-B003262EE8DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C83939E7-713A-4A67-B0E9-B003262EE8DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

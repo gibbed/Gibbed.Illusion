@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 
 namespace Gibbed.Illusion.ExploreSDS
@@ -25,7 +19,7 @@ namespace Gibbed.Illusion.ExploreSDS
 
             var path = this.openArchiveDialog.FileName;
             var archive = new ArchiveViewer() { MdiParent = this };
-            archive.Load(path);
+            archive.LoadArchive(path);
             archive.Show();
         }
     }

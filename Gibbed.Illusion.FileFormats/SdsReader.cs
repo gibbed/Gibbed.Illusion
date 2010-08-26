@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+using System.Text;
 using System.Xml.XPath;
 using Gibbed.Helpers;
 
@@ -11,13 +10,14 @@ namespace Gibbed.Illusion.FileFormats
     // SDS = SluttyDataStorage :D?
     public class SdsReader
     {
+        public DataStorage.ArchiveHeader Header;
         private string Platform;
         private Stream FileStream;
         private Stream DataStream;
         private BlockStream BlockStream;
 
-        public List<DataStorage.ResourceType> ResourceTypes =
-            new List<DataStorage.ResourceType>();
+        public List<DataStorage.ResourceTypeReference> ResourceTypes =
+            new List<DataStorage.ResourceTypeReference>();
 
         public string Xml { get; private set; }
 
@@ -180,7 +180,7 @@ namespace Gibbed.Illusion.FileFormats
                 this.ResourceTypes.Clear();
                 for (uint i = 0; i < count; i++)
                 {
-                    var type = new DataStorage.ResourceType();
+                    var type = new DataStorage.ResourceTypeReference();
                     type.Deserialize(data, littleEndian);
                     this.ResourceTypes.Add(type);
                 }
@@ -216,7 +216,7 @@ namespace Gibbed.Illusion.FileFormats
                 byte flags = data.ReadValueU8();
                 // if flags != 4 : see note 1
 
-                if (magic != 0x6C7A4555 || alignment != 0x4000 || flags != 4)
+                if (magic != 0x6C7A4555 || /*alignment != 0x4000 ||*/ flags != 4)
                 {
                     throw new InvalidOperationException();
                 }
@@ -294,7 +294,7 @@ namespace Gibbed.Illusion.FileFormats
                         {
                             Header = fileHeader,
                             Description = description,
-                            Offset = input.Position,
+                            Offset = blockStream.Position,
                             Size = fileHeader.Size - 30,
                         });
 
@@ -302,11 +302,17 @@ namespace Gibbed.Illusion.FileFormats
                 }
             }
 
+            this.Header = archiveHeader;
             this.BlockStream = blockStream;
             this.DataStream = data;
             this.FileStream = input;
 
             this.BlockStream.FreeLoadedBlocks();
+        }
+
+        public void ExportData(Stream output)
+        {
+            this.BlockStream.SaveUncompressed(output);
         }
 
         public void ExportData(string outputPath)
@@ -315,13 +321,15 @@ namespace Gibbed.Illusion.FileFormats
             {
                 this.BlockStream.SaveUncompressed(output);
             }
+
+            this.BlockStream.FreeLoadedBlocks();
         }
 
         public class Entry
         {
-            internal DataStorage.FileHeader Header;
-            internal long Offset;
-            internal uint Size;
+            public DataStorage.FileHeader Header;
+            public long Offset;
+            public uint Size;
             public uint TypeId { get { return this.Header.TypeId; } }
             public string Description { get; internal set; }
         }
@@ -341,6 +349,30 @@ namespace Gibbed.Illusion.FileFormats
                     left -= block;
                 }
             }
+
+            this.BlockStream.FreeLoadedBlocks();
+        }
+
+        public MemoryStream GetEntry(Entry entry)
+        {
+            this.BlockStream.Seek(entry.Offset, SeekOrigin.Begin);
+            
+            var memory = new MemoryStream();
+            {
+                long left = entry.Size;
+                byte[] buffer = new byte[0x4000];
+                while (left > 0)
+                {
+                    int block = (int)(Math.Min(left, buffer.Length));
+                    this.BlockStream.Read(buffer, 0, block);
+                    memory.Write(buffer, 0, block);
+                    left -= block;
+                }
+                memory.Position = 0;
+            }
+
+            this.BlockStream.FreeLoadedBlocks();
+            return memory;
         }
     }
 }
