@@ -162,5 +162,13 @@ namespace Gibbed.Illusion.ExploreSDS
 
             this.Reader.ExportEntry(entry, this.saveRawDialog.FileName);
         }
+
+        private void OnClosed(object sender, FormClosedEventArgs e)
+        {
+            if (this.Reader != null)
+            {
+                this.Reader.Close();
+            }
+        }
     }
 }

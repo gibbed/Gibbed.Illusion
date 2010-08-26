@@ -123,6 +123,7 @@
             this.Controls.Add(this.toolStrip);
             this.Name = "ArchiveViewer";
             this.Text = "Archive";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnClosed);
             this.entryMenuStrip.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
