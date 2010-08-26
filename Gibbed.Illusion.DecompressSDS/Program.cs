@@ -46,7 +46,7 @@ namespace Gibbed.Illusion.DecompressSDS
             if (extras.Count < 1 || extras.Count > 2 || showHelp == true)
             {
                 Console.WriteLine("Usage: {0} [OPTIONS]+ input_sds [output_sds]", GetExecutableName());
-                Console.WriteLine("Decrypt specified SDS archive.");
+                Console.WriteLine("Decompress specified SDS archive.");
                 Console.WriteLine();
                 Console.WriteLine("Options:");
                 options.WriteOptionDescriptions(Console.Out);
