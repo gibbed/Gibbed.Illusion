@@ -33,6 +33,8 @@
             this.entryTreeView = new System.Windows.Forms.TreeView();
             this.entryMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.saveRawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.resourceTypeImageList = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.saveUncompressedDataButton = new System.Windows.Forms.ToolStripButton();
@@ -42,8 +44,6 @@
             this.saveRawDialog = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.hintLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.entryMenuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
@@ -78,6 +78,18 @@
             this.saveRawToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.saveRawToolStripMenuItem.Text = "Save &Raw";
             this.saveRawToolStripMenuItem.Click += new System.EventHandler(this.OnSaveRawEntry);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(120, 6);
+            // 
+            // openToolStripMenuItem
+            // 
+            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.openToolStripMenuItem.Text = "&Open";
+            this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenEntry2);
             // 
             // resourceTypeImageList
             // 
@@ -133,11 +145,10 @@
             // 
             // openEntryButton
             // 
-            this.openEntryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.openEntryButton.Image = ((System.Drawing.Image)(resources.GetObject("openEntryButton.Image")));
             this.openEntryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openEntryButton.Name = "openEntryButton";
-            this.openEntryButton.Size = new System.Drawing.Size(23, 22);
+            this.openEntryButton.Size = new System.Drawing.Size(83, 22);
             this.openEntryButton.Text = "Open Data";
             this.openEntryButton.Click += new System.EventHandler(this.OnOpenEntry2);
             // 
@@ -160,18 +171,6 @@
             this.hintLabel.Name = "hintLabel";
             this.hintLabel.Size = new System.Drawing.Size(30, 17);
             this.hintLabel.Text = "Hint";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(120, 6);
-            // 
-            // openToolStripMenuItem
-            // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.openToolStripMenuItem.Text = "&Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenEntry2);
             // 
             // ArchiveViewer
             // 

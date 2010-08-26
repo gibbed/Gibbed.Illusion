@@ -117,10 +117,26 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="menuStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
   <metadata name="openArchiveDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>132, 17</value>
   </metadata>
+  <metadata name="mainToolStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>287, 17</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="openArchiveButton.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAH9SURBVDhPjZLtS1NRHMd//0fvJYhCengXQb3qZb0MC4tI
+        6I0velEgTZtNNzemtzWbY7pY2fAJioosenBFEWpqY2Y+LcuhNJd7sHvXNnfv1/0OJZxuYAc+nC+Hz/ne
+        ew6H6PeYcNC5cQdZ/wd2/+zbnsda6bq66EAychZrI7VQY9egJ7qB1Tsya2Gwayp4b6MW5IZgZAZRWO7E
+        +mg95vqOw1jsksBKCOyaCt7ayK6n+1FO9gr09ACioWPQF3wSRuI22DUVvLGSs5wKY3M1JOA81XMY5flb
+        EvpyEOyaCkYayb35/S6KiR4B53feQyjNeiXKSwGwayp4biGluBJEfqlLwDmi7EdhxiNRivvB7jMLHZBK
+        njaQ99e3ANQFr4DzC3c18tOKRJHvxDDAvlTw+Ar58l982JhVBJyH2/ZCi3VIFOY6kdY0sC8VPLhMAXXe
+        g+y0S8D5Ucse/Iy6JfKfbyKeSoF9qWDoEgU3Ztqx/tEu4Hy/eTdyUy4J7dMNHB01wL5UEK6n3mzMidRE
+        s4DzYGMVspNOCbVypH1PVLAvFfgv0MNM1I7kWJMgU/mLfkuV6Qha5VLZ7a6jI1KB+wy1v1QO5uLDF0s/
+        xq1IT9rgrKGM6zS9+ht2Te+AF/x1dMJ3nvx9DbsiH+6d/NpWQ6//Ke602FFL1ZWvXm09RZ6d3C10YQZa
+        oFr9ywAAAABJRU5ErkJggg==
+</value>
+  </data>
 </root>
