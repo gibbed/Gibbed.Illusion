@@ -190,19 +190,17 @@ namespace Gibbed.Illusion.ExploreSDS
                 entry.Size);
         }
 
-        private void OnOpenEntry(object sender, TreeNodeMouseClickEventArgs e)
+        private void OpenEntry(TreeNode node)
         {
-            if (this.entryTreeView.SelectedNode == null)
+            if (node == null)
             {
-                this.hintLabel.Text = "";
                 return;
             }
 
-            var entry = this.entryTreeView.SelectedNode.Tag as
+            var entry = node.Tag as
                 FileFormats.SdsReader.Entry;
             if (entry == null)
             {
-                this.hintLabel.Text = "";
                 return;
             }
 
@@ -222,6 +220,16 @@ namespace Gibbed.Illusion.ExploreSDS
                 viewer.LoadFile(entry.Header, this.Reader.GetEntry(entry));
                 viewer.Show();
             }
+        }
+
+        private void OnOpenEntry1(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            this.OpenEntry(e.Node);
+        }
+
+        private void OnOpenEntry2(object sender, EventArgs e)
+        {
+            this.OpenEntry(this.entryTreeView.SelectedNode);
         }
     }
 }

@@ -29,22 +29,22 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlViewer));
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.contentTextBox = new System.Windows.Forms.TextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // textBox1
+            // contentTextBox
             // 
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox1.Location = new System.Drawing.Point(0, 0);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(640, 320);
-            this.textBox1.TabIndex = 0;
+            this.contentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.contentTextBox.Location = new System.Drawing.Point(0, 25);
+            this.contentTextBox.Multiline = true;
+            this.contentTextBox.Name = "contentTextBox";
+            this.contentTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.contentTextBox.Size = new System.Drawing.Size(640, 295);
+            this.contentTextBox.TabIndex = 0;
             // 
             // toolStrip1
             // 
@@ -76,8 +76,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 320);
+            this.Controls.Add(this.contentTextBox);
             this.Controls.Add(this.toolStrip1);
-            this.Controls.Add(this.textBox1);
             this.Name = "XmlViewer";
             this.Text = "XML";
             this.toolStrip1.ResumeLayout(false);
@@ -89,7 +89,7 @@
 
         #endregion
 
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox contentTextBox;
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton saveButton;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;

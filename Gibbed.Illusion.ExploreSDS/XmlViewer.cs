@@ -18,13 +18,24 @@ namespace Gibbed.Illusion.ExploreSDS
             xml.Deserialize(header, data);
 
             this.Text += ": " + xml.Name + " (" + xml.Tag + ")";
-            this.textBox1.Text = xml.Content;
+            
+            this.contentTextBox.Text = xml.Content;
+            this.contentTextBox.Select(0, 0);
 
             this.XmlResource = xml;
         }
 
         private void OnSave(object sender, System.EventArgs e)
         {
+            var name = this.XmlResource.Name;
+            if (name.StartsWith("/") == true)
+            {
+                name = name.Substring(1);
+            }
+            name = name.Replace("/", "\\");
+            name = Path.ChangeExtension(name, ".xml");
+
+            this.saveFileDialog.FileName = name;
             if (this.saveFileDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
