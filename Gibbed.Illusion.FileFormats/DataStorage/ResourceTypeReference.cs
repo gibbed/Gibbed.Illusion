@@ -13,20 +13,14 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
         public void Serialize(Stream output, bool littleEndian)
         {
             output.WriteValueU32(this.Id, littleEndian);
-            output.WriteValueS32(this.Name.Length, littleEndian);
-            output.WriteStringASCII(this.Name);
+            output.WriteStringU32(this.Name, littleEndian);
             output.WriteValueU32(this.Parent, littleEndian);
         }
 
         public void Deserialize(Stream input, bool littleEndian)
         {
             this.Id = input.ReadValueU32(littleEndian);
-            uint length = input.ReadValueU32(littleEndian);
-            if (length > 0x3FF)
-            {
-                throw new InvalidOperationException();
-            }
-            this.Name = input.ReadStringASCII(length);
+            this.Name = input.ReadStringU32(littleEndian);
             this.Parent = input.ReadValueU32(littleEndian);
         }
     }

@@ -1,11 +1,17 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats
 {
     public static class StreamHelpers
     {
+        static StreamHelpers()
+        {
+            Gibbed.Helpers.StreamHelpers.DefaultEncoding = Encoding.GetEncoding(1252);
+        }
+
         public static MemoryStream ReadToMemoryStreamSafe(this Stream stream, long size, bool littleEndian)
         {
             MemoryStream memory = new MemoryStream();
@@ -56,14 +62,45 @@ namespace Gibbed.Illusion.FileFormats
             data.Position = position;
         }
 
-        public static string ReadStringASCIIU32(this Stream stream)
+        public static string ReadStringU16(this Stream stream)
         {
-            uint length = stream.ReadValueU32();
+            return stream.ReadStringU16(true);
+        }
+
+        public static string ReadStringU16(this Stream stream, bool littleEndian)
+        {
+            var length = stream.ReadValueU16(littleEndian);
             if (length > 0x3FF)
             {
                 throw new InvalidOperationException();
             }
-            return stream.ReadStringASCII(length);
+            return stream.ReadString(length);
+        }
+
+        public static string ReadStringU32(this Stream stream)
+        {
+            return stream.ReadStringU32(true);
+        }
+
+        public static string ReadStringU32(this Stream stream, bool littleEndian)
+        {
+            var length = stream.ReadValueU32(littleEndian);
+            if (length > 0x3FF)
+            {
+                throw new InvalidOperationException();
+            }
+            return stream.ReadString(length);
+        }
+
+        public static void WriteStringU32(this Stream stream, string value)
+        {
+            stream.WriteStringU32(value, true);
+        }
+
+        public static void WriteStringU32(this Stream stream, string value, bool littleEndian)
+        {
+            stream.WriteValueS32(value.Length, littleEndian);
+            stream.WriteString(value);
         }
     }
 }

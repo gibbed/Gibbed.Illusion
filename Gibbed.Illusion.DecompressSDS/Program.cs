@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using Gibbed.Helpers;
 using Gibbed.Illusion.FileFormats;
 using NDesk.Options;
@@ -65,9 +66,9 @@ namespace Gibbed.Illusion.DecompressSDS
 
             using (var output = File.Open(outputPath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
             {
-                output.WriteStringASCII("SDS\0");
+                output.WriteString("SDS\0", Encoding.ASCII);
                 output.WriteValueU32(19);
-                output.WriteStringASCII("PC\0\0");
+                output.WriteString("PC\0\0", Encoding.ASCII);
                 output.WriteValueU32(0x5FFB74F3); // hash of header, doesn't need to be calculated
 
                 var header = archive.Header;
@@ -96,7 +97,7 @@ namespace Gibbed.Illusion.DecompressSDS
                 output.WriteValueU8(0);
 
                 header.XmlOffset = (uint)output.Position;
-                output.WriteStringASCII(archive.Xml);
+                output.WriteString(archive.Xml);
 
                 output.Seek(16, SeekOrigin.Begin);
 

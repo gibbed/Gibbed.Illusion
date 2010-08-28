@@ -139,7 +139,7 @@ namespace Gibbed.Illusion.FileFormats
             bool littleEndian;
             {
                 data.Seek(8, SeekOrigin.Begin);
-                var platform = data.ReadStringASCII(4, true);
+                var platform = data.ReadString(4, true, Encoding.ASCII);
 
                 littleEndian =
                     platform != "XBOX" &&
@@ -151,9 +151,9 @@ namespace Gibbed.Illusion.FileFormats
             {
                 var memory = data.ReadToMemoryStreamSafe(
                     12, littleEndian);
-                var magic = memory.ReadStringASCII(4, true);
+                var magic = memory.ReadString(4, true, Encoding.ASCII);
                 var version = memory.ReadValueU32(littleEndian);
-                var platform = memory.ReadStringASCII(4, true);
+                var platform = memory.ReadString(4, true, Encoding.ASCII);
 
                 if (magic != "SDS")
                 {

@@ -17,9 +17,9 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
 
         public void Deserialize(DataStorage.FileHeader header, Stream input)
         {
-            this.Tag = input.ReadStringASCIIU32();
+            this.Tag = input.ReadStringU32();
             this.Unk1 = (header.Version >= 3) ? (input.ReadValueU8() != 0) : true;
-            this.Name = input.ReadStringASCIIU32();
+            this.Name = input.ReadStringU32();
             
             var unk3 = (header.Version >= 2) ? (input.ReadValueU8() != 0) : false;
 
@@ -49,7 +49,7 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
                         throw new FormatException();
                     }
 
-                    var value = input.ReadStringASCIIZ();
+                    var value = input.ReadStringZ();
                     if (string.IsNullOrEmpty(value) == true)
                     {
                         return null;

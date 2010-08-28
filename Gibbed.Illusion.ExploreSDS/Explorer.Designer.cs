@@ -36,15 +36,14 @@
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
+            this.closeAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.cascadeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileVerticalMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tileHorizontalMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.closeAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.arrangeIconsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.mainToolStrip.SuspendLayout();
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
@@ -90,7 +89,6 @@
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.openMenuItem,
             this.toolStripSeparator3,
-            this.toolStripSeparator4,
             this.exitMenuItem});
             this.fileMenu.ImageTransparentColor = System.Drawing.SystemColors.ActiveBorder;
             this.fileMenu.Name = "fileMenu";
@@ -112,11 +110,6 @@
             this.toolStripSeparator3.Name = "toolStripSeparator3";
             this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
             // 
-            // toolStripSeparator4
-            // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(149, 6);
-            // 
             // exitMenuItem
             // 
             this.exitMenuItem.Name = "exitMenuItem";
@@ -136,6 +129,18 @@
             this.windowsMenu.Name = "windowsMenu";
             this.windowsMenu.Size = new System.Drawing.Size(68, 20);
             this.windowsMenu.Text = "&Windows";
+            // 
+            // closeAllMenuItem
+            // 
+            this.closeAllMenuItem.Name = "closeAllMenuItem";
+            this.closeAllMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeAllMenuItem.Text = "C&lose All";
+            this.closeAllMenuItem.Click += new System.EventHandler(this.OnWindowCloseAll);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // cascadeMenuItem
             // 
@@ -158,24 +163,12 @@
             this.tileHorizontalMenuItem.Text = "Tile &Horizontal";
             this.tileHorizontalMenuItem.Click += new System.EventHandler(this.OnWindowTileHorizontal);
             // 
-            // closeAllMenuItem
-            // 
-            this.closeAllMenuItem.Name = "closeAllMenuItem";
-            this.closeAllMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.closeAllMenuItem.Text = "C&lose All";
-            this.closeAllMenuItem.Click += new System.EventHandler(this.OnWindowCloseAll);
-            // 
             // arrangeIconsMenuItem
             // 
             this.arrangeIconsMenuItem.Name = "arrangeIconsMenuItem";
             this.arrangeIconsMenuItem.Size = new System.Drawing.Size(152, 22);
             this.arrangeIconsMenuItem.Text = "&Arrange Icons";
             this.arrangeIconsMenuItem.Click += new System.EventHandler(this.OnWindowArrangeIcons);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
             // 
             // Explorer
             // 
@@ -205,7 +198,6 @@
         private System.Windows.Forms.ToolStripMenuItem fileMenu;
         private System.Windows.Forms.ToolStripMenuItem openMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem exitMenuItem;
         private System.Windows.Forms.ToolStripMenuItem windowsMenu;
         private System.Windows.Forms.ToolStripMenuItem cascadeMenuItem;

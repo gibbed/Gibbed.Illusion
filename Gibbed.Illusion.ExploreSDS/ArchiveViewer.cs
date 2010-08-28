@@ -229,6 +229,15 @@ namespace Gibbed.Illusion.ExploreSDS
                 viewer.LoadFile(entry.Header, this.Reader.GetEntry(entry));
                 viewer.Show();
             }
+            else if (type.Name == "Table")
+            {
+                var viewer = new TableViewer()
+                {
+                    MdiParent = this.MdiParent,
+                };
+                viewer.LoadFile(entry.Header, this.Reader.GetEntry(entry));
+                viewer.Show();
+            }
         }
 
         private void OnOpenEntry1(object sender, TreeNodeMouseClickEventArgs e)
