@@ -9,7 +9,7 @@ namespace Gibbed.Illusion.FileFormats
 
         public static uint Hash32(string value)
         {
-            var bytes = Encoding.UTF8.GetBytes(value);
+            var bytes = Encoding.GetEncoding(1252).GetBytes(value);
             return Hash32(bytes, 0, bytes.Length);
         }
 
@@ -38,7 +38,7 @@ namespace Gibbed.Illusion.FileFormats
 
         public static ulong Hash64(string value)
         {
-            var bytes = Encoding.UTF8.GetBytes(value);
+            var bytes = Encoding.GetEncoding(1252).GetBytes(value);
             return Hash64(bytes, 0, bytes.Length);
         }
 
