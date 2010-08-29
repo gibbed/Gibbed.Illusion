@@ -74,29 +74,90 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             output.WriteFromStream(nodeData, nodeData.Length);
         }
 
-        private static uint SerializeData(Stream output, object value)
+        private static uint SerializeData(Stream output, DataValue data)
         {
             uint position = (uint)output.Position;
-            if (value is Value1)
-            {
-                output.WriteValueU32(1);
-                output.WriteValueU32(0);
-                output.WriteStringZ(((Value1)value).Value, Encoding.UTF8);
-            }
-            else if (value is Value4)
-            {
-                output.WriteValueU32(4);
-                output.WriteValueU32(0);
-                output.WriteStringZ(((Value4)value).Value, Encoding.UTF8);
-            }
-            else if (value == null)
+
+            if (data == null)
             {
                 return 0;
             }
-            else
+
+            switch (data.Type)
             {
-                throw new InvalidOperationException();
+                case DataType.Special:
+                {
+                    output.WriteValueU32(1);
+                    output.WriteValueU32(0);
+                    output.WriteStringZ((string)data.Value, Encoding.UTF8);
+                    break;
+                }
+
+                case DataType.Boolean:
+                {
+                    output.WriteValueU32(2);
+                    output.WriteValueU32(0);
+
+                    if (data.Value is bool)
+                    {
+                        output.WriteValueU8((bool)data.Value == true ? (byte)1 : (byte)0);
+                    }
+                    else
+                    {
+                        output.WriteValueU8(bool.Parse((string)data.Value) == true ? (byte)1 : (byte)0);
+                    }
+
+                    break;
+                }
+
+                case DataType.Float:
+                {
+                    output.WriteValueU32(3);
+                    output.WriteValueU32(0);
+
+                    if (data.Value is float)
+                    {
+                        output.WriteValueF32((float)data.Value);
+                    }
+                    else
+                    {
+                        output.WriteValueF32(float.Parse((string)data.Value));
+                    }
+
+                    break;
+                }
+
+                case DataType.String:
+                {
+                    output.WriteValueU32(4);
+                    output.WriteValueU32(0);
+                    output.WriteStringZ((string)data.Value, Encoding.UTF8);
+                    break;
+                }
+
+                case DataType.Integer:
+                {
+                    output.WriteValueU32(5);
+                    output.WriteValueU32(0);
+
+                    if (data.Value is int)
+                    {
+                        output.WriteValueS32((int)data.Value);
+                    }
+                    else
+                    {
+                        output.WriteValueS32(int.Parse((string)data.Value));
+                    }
+
+                    break;
+                }
+
+                default:
+                {
+                    throw new InvalidOperationException();
+                }
             }
+
             return position;
         }
 
@@ -104,14 +165,14 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
         {
             var node = new NodeEntry()
             {
-                Name = new Value4() { Value = nav.Name },
+                Name = new DataValue(DataType.String, nav.Name),
                 Value = null,
                 Id = (uint)nodes.Count,
             };
             parent.Children.Add(node.Id);
             nodes.Add(node);
 
-            bool type1 = false;
+            DataType type = DataType.String;
 
             if (nav.MoveToFirstAttribute() == true)
             {
@@ -119,26 +180,14 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
                 {
                     if (nav.Name == "__type")
                     {
-                        if (nav.Value == "1")
-                        {
-                            type1 = true;
-                        }
-                        else if (nav.Value == "4")
-                        {
-                            type1 = false;
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException();
-                        }
-
+                        type = DataTypeFromString(nav.Value);
                         continue;
                     }
 
                     node.Attributes.Add(new AttributeEntry()
                         {
-                            Name = new Value4() { Value = nav.Name },
-                            Value = new Value4() { Value = nav.Value },
+                            Name = new DataValue(DataType.String, nav.Name),
+                            Value = new DataValue(DataType.String, nav.Value),
                         });
                 }
                 while (nav.MoveToNextAttribute() == true);
@@ -157,14 +206,7 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             {
                 if (string.IsNullOrEmpty(nav.Value) == false)
                 {
-                    if (type1 == true)
-                    {
-                        node.Value = new Value1() { Value = nav.Value };
-                    }
-                    else
-                    {
-                        node.Value = new Value4() { Value = nav.Value };
-                    }
+                    node.Value = new DataValue(type, nav.Value);
                 }
             }
         }
@@ -210,11 +252,16 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
                 node.Attributes.Clear();
                 for (uint j = 0; j < attributeCount; j++)
                 {
-                    node.Attributes.Add(new AttributeEntry()
+                    var attribute = new AttributeEntry()
                     {
                         Name = DeserializeData(data, input.ReadValueU32()),
                         Value = DeserializeData(data, input.ReadValueU32()),
-                    });
+                    };
+                    if (attribute.Name.Value == "__type")
+                    {
+                        throw new FormatException("someone used __type?");
+                    }
+                    node.Attributes.Add(attribute);
                 }
 
                 nodes.Add(node);
@@ -259,14 +306,14 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             return output.ToString();
         }
 
-        private static object DeserializeData(Stream input, uint offset)
+        private static DataValue DeserializeData(Stream input, uint offset)
         {
             input.Seek(offset, SeekOrigin.Begin);
-            var type = input.ReadValueU32();
-
+            
+            var type = (DataType)input.ReadValueU32();
             switch (type)
             {
-                case 1:
+                case DataType.Special:
                 {
                     var unk0 = input.ReadValueU32();
                     if (unk0 != 0)
@@ -280,13 +327,34 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
                         return null;
                     }
 
-                    return new Value1()
-                    {
-                        Value = value,
-                    };
+                    return new DataValue(type, value);
                 }
 
-                case 4:
+                case DataType.Boolean:
+                {
+                    var unk0 = input.ReadValueU32();
+                    if (unk0 != 0)
+                    {
+                        throw new FormatException();
+                    }
+
+                    var value = input.ReadValueU8() != 0;
+                    return new DataValue(type, value);
+                }
+
+                case DataType.Float:
+                {
+                    var unk0 = input.ReadValueU32();
+                    if (unk0 != 0)
+                    {
+                        throw new FormatException();
+                    }
+
+                    var value = input.ReadValueF32();
+                    return new DataValue(type, value);
+                }
+
+                case DataType.String:
                 {
                     var unk0 = input.ReadValueU32();
                     if (unk0 != 0)
@@ -300,10 +368,19 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
                         return null;
                     }
 
-                    return new Value4()
+                    return new DataValue(type, value);
+                }
+
+                case DataType.Integer:
+                {
+                    var unk0 = input.ReadValueU32();
+                    if (unk0 != 0)
                     {
-                        Value = value,
-                    };
+                        throw new FormatException();
+                    }
+
+                    var value = input.ReadValueS32();
+                    return new DataValue(type, value);
                 }
 
                 default:
@@ -315,12 +392,14 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
 
         private static void WriteXmlNode(XmlWriter writer, List<NodeEntry> nodes, NodeEntry node)
         {
-            writer.WriteStartElement(((Value4)node.Name).Value);
+            writer.WriteStartElement(node.Name.ToString());
 
             foreach (var attribute in node.Attributes)
             {
-                writer.WriteStartAttribute(((Value4)attribute.Name).Value);
-                writer.WriteValue(attribute.Value == null ? "" : ((Value4)attribute.Value).Value);
+                writer.WriteStartAttribute(attribute.Name.ToString());
+                writer.WriteValue(
+                    attribute.Value == null ?
+                    "" : attribute.Value.ToString());
                 writer.WriteEndAttribute();
             }
 
@@ -337,19 +416,12 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
 
             if (node.Value != null)
             {
-                if (node.Value is Value1)
+                if (node.Value.Type != DataType.String)
                 {
-                    writer.WriteAttributeString("__type", "1");
-                    writer.WriteValue(((Value1)node.Value).Value);
+                    writer.WriteAttributeString("__type", DataTypeToString(node.Value.Type));
                 }
-                else if (node.Value is Value4)
-                {
-                    writer.WriteValue(((Value4)node.Value).Value);
-                }
-                else
-                {
-                    throw new InvalidOperationException();
-                }
+
+                writer.WriteValue(node.Value.ToString());
             }
 
             writer.WriteEndElement();
@@ -357,27 +429,75 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
 
         private class NodeEntry
         {
-            public object Name;
-            public object Value;
+            public DataValue Name;
+            public DataValue Value;
             public uint Id;
             public List<uint> Children = new List<uint>();
             public List<AttributeEntry> Attributes = new List<AttributeEntry>();
         }
 
-        public class Value1
+        private class DataValue
         {
-            public string Value;
+            public DataType Type;
+            public object Value;
+
+            public DataValue(DataType type, object value)
+            {
+                this.Type = type;
+                this.Value = value;
+            }
+
+            public override string ToString()
+            {
+                return this.Value.ToString();
+            }
         }
 
-        public class Value4
+        private static string DataTypeToString(DataType type)
         {
-            public string Value;
+            switch (type)
+            {
+                case DataType.Special: return "x";
+                case DataType.Boolean: return "b";
+                case DataType.Float: return "f";
+                case DataType.String: return "s";
+                case DataType.Integer: return "i";
+                default:
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+
+        private static DataType DataTypeFromString(string type)
+        {
+            switch (type)
+            {
+                case "x": return DataType.Special;
+                case "b": return DataType.Boolean;
+                case "f": return DataType.Float;
+                case "s": return DataType.String;
+                case "i": return DataType.Integer;
+                default:
+                {
+                    throw new InvalidOperationException();
+                }
+            }
+        }
+
+        private enum DataType
+        {
+            Special = 1,
+            Boolean = 2,
+            Float = 3,
+            String = 4,
+            Integer = 5,
         }
 
         private class AttributeEntry
         {
-            public object Name;
-            public object Value;
+            public DataValue Name;
+            public DataValue Value;
         }
     }
 }
