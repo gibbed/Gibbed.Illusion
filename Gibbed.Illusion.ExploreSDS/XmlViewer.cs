@@ -25,6 +25,11 @@ namespace Gibbed.Illusion.ExploreSDS
 
             this.Entry = entry;
             this.Resource = xml;
+
+            if (this.Resource.Unk3 == true)
+            {
+                this.saveButton.Enabled = false;
+            }
         }
 
         private void OnSave(object sender, System.EventArgs e)

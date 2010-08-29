@@ -257,7 +257,7 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
                         Name = DeserializeData(data, input.ReadValueU32()),
                         Value = DeserializeData(data, input.ReadValueU32()),
                     };
-                    if (attribute.Name.Value == "__type")
+                    if (attribute.Name.Value.ToString() == "__type")
                     {
                         throw new FormatException("someone used __type?");
                     }
@@ -436,6 +436,21 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             public List<AttributeEntry> Attributes = new List<AttributeEntry>();
         }
 
+        private class AttributeEntry
+        {
+            public DataValue Name;
+            public DataValue Value;
+        }
+
+        private enum DataType
+        {
+            Special = 1,
+            Boolean = 2,
+            Float = 3,
+            String = 4,
+            Integer = 5,
+        }
+
         private class DataValue
         {
             public DataType Type;
@@ -483,21 +498,6 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
                     throw new InvalidOperationException();
                 }
             }
-        }
-
-        private enum DataType
-        {
-            Special = 1,
-            Boolean = 2,
-            Float = 3,
-            String = 4,
-            Integer = 5,
-        }
-
-        private class AttributeEntry
-        {
-            public DataValue Name;
-            public DataValue Value;
         }
     }
 }
