@@ -51,6 +51,7 @@
             this.contentTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.contentTextBox.Size = new System.Drawing.Size(640, 295);
             this.contentTextBox.TabIndex = 0;
+            this.contentTextBox.WordWrap = false;
             // 
             // toolStrip
             // 
