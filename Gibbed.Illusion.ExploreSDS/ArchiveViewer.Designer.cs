@@ -51,6 +51,7 @@
             this.openResourceDialog = new System.Windows.Forms.OpenFileDialog();
             this.resourceMenuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // entryTreeView
@@ -190,6 +191,8 @@
             // 
             // statusStrip
             // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.hintLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 218);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(480, 22);
@@ -224,6 +227,8 @@
             this.resourceMenuStrip.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
