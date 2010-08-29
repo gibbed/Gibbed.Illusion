@@ -31,10 +31,12 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XmlViewer));
             this.contentTextBox = new System.Windows.Forms.TextBox();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.saveToFileButton = new System.Windows.Forms.ToolStripButton();
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.saveToFileButton = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
+            this.loadFromFileButton = new System.Windows.Forms.ToolStripButton();
+            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -54,12 +56,27 @@
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.saveButton,
             this.toolStripSeparator1,
+            this.loadFromFileButton,
             this.saveToFileButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(640, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
+            // 
+            // saveButton
+            // 
+            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
+            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(51, 22);
+            this.saveButton.Text = "Save";
+            this.saveButton.Click += new System.EventHandler(this.OnSave);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // saveToFileButton
             // 
@@ -76,19 +93,20 @@
             this.saveFileDialog.DefaultExt = "xml";
             this.saveFileDialog.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
             // 
-            // saveButton
+            // loadFromFileButton
             // 
-            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
-            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(51, 22);
-            this.saveButton.Text = "Save";
-            this.saveButton.Click += new System.EventHandler(this.OnSave);
+            this.loadFromFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.loadFromFileButton.Image = ((System.Drawing.Image)(resources.GetObject("loadFromFileButton.Image")));
+            this.loadFromFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.loadFromFileButton.Name = "loadFromFileButton";
+            this.loadFromFileButton.Size = new System.Drawing.Size(23, 22);
+            this.loadFromFileButton.Text = "Load From File";
+            this.loadFromFileButton.Click += new System.EventHandler(this.OnLoadFromFile);
             // 
-            // toolStripSeparator1
+            // openFileDialog
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.openFileDialog.DefaultExt = "xml";
+            this.openFileDialog.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
             // 
             // XmlViewer
             // 
@@ -114,5 +132,7 @@
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripButton saveButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton loadFromFileButton;
+        private System.Windows.Forms.OpenFileDialog openFileDialog;
     }
 }

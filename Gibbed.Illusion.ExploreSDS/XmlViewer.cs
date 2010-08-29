@@ -29,6 +29,8 @@ namespace Gibbed.Illusion.ExploreSDS
 
         private void OnSave(object sender, System.EventArgs e)
         {
+            this.Resource.Content = this.contentTextBox.Text;
+
             var data = new MemoryStream();
             this.Resource.Serialize(this.Entry.Header, data);
             this.Entry.Data = data;
@@ -52,7 +54,20 @@ namespace Gibbed.Illusion.ExploreSDS
 
             using (var output = new StreamWriter(this.saveFileDialog.FileName))
             {
-                output.Write(this.Resource.Content);
+                output.Write(this.contentTextBox.Text);
+            }
+        }
+
+        private void OnLoadFromFile(object sender, System.EventArgs e)
+        {
+            if (this.openFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            using (var input = new StreamReader(this.openFileDialog.FileName))
+            {
+                this.contentTextBox.Text = input.ReadToEnd();
             }
         }
     }
