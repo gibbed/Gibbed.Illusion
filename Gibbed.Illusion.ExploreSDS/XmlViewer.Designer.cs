@@ -33,9 +33,9 @@
             this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.saveButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.loadFromFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveToFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.loadFromFileButton = new System.Windows.Forms.ToolStripButton();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -45,6 +45,7 @@
             this.contentTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.contentTextBox.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.contentTextBox.Location = new System.Drawing.Point(0, 25);
+            this.contentTextBox.MaxLength = 2147483647;
             this.contentTextBox.Multiline = true;
             this.contentTextBox.Name = "contentTextBox";
             this.contentTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -78,6 +79,16 @@
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
+            // loadFromFileButton
+            // 
+            this.loadFromFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.loadFromFileButton.Image = ((System.Drawing.Image)(resources.GetObject("loadFromFileButton.Image")));
+            this.loadFromFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.loadFromFileButton.Name = "loadFromFileButton";
+            this.loadFromFileButton.Size = new System.Drawing.Size(23, 22);
+            this.loadFromFileButton.Text = "Load From File";
+            this.loadFromFileButton.Click += new System.EventHandler(this.OnLoadFromFile);
+            // 
             // saveToFileButton
             // 
             this.saveToFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -92,16 +103,6 @@
             // 
             this.saveFileDialog.DefaultExt = "xml";
             this.saveFileDialog.Filter = "XML Files (*.xml)|*.xml|All Files (*.*)|*.*";
-            // 
-            // loadFromFileButton
-            // 
-            this.loadFromFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.loadFromFileButton.Image = ((System.Drawing.Image)(resources.GetObject("loadFromFileButton.Image")));
-            this.loadFromFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.loadFromFileButton.Name = "loadFromFileButton";
-            this.loadFromFileButton.Size = new System.Drawing.Size(23, 22);
-            this.loadFromFileButton.Text = "Load From File";
-            this.loadFromFileButton.Click += new System.EventHandler(this.OnLoadFromFile);
             // 
             // openFileDialog
             // 
