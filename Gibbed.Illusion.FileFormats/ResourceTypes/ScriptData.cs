@@ -21,6 +21,7 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             }
 
             output.WriteStringU16(this.Name);
+            output.WriteValueS32(this.Data.Length);
             output.Write(this.Data, 0, this.Data.Length);
         }
 
