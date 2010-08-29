@@ -116,7 +116,7 @@ namespace Gibbed.Illusion.ExploreSDS
             this.entryTreeView.EndUpdate();
         }
 
-        private void OnSaveRawEntry(object sender, EventArgs e)
+        private void OnSaveResourceToFile(object sender, EventArgs e)
         {
             if (this.entryTreeView.SelectedNode == null)
             {
@@ -144,19 +144,43 @@ namespace Gibbed.Illusion.ExploreSDS
             }
             name = name.Replace("/", "\\");
 
-            this.saveRawDialog.FileName = Path.ChangeExtension(Path.GetFileName(name), "." + type.Name);
-            if (this.saveRawDialog.ShowDialog() != DialogResult.OK)
+            this.saveResourceDialog.FileName = Path.ChangeExtension(Path.GetFileName(name), "." + type.Name);
+            if (this.saveResourceDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
             }
 
             using (var output = File.Open(
-                this.saveRawDialog.FileName,
+                this.saveResourceDialog.FileName,
                 FileMode.Create,
                 FileAccess.Write,
                 FileShare.ReadWrite))
             {
                 output.WriteFromStream(entry.Data, entry.Data.Length);
+            }
+        }
+
+        private void OnLoadResourceFromFile(object sender, EventArgs e)
+        {
+            if (this.entryTreeView.SelectedNode == null)
+            {
+                return;
+            }
+
+            var entry = this.entryTreeView.SelectedNode.Tag as
+                FileFormats.SdsMemory.Entry;
+            if (entry == null)
+            {
+                return;
+            }
+
+            using (var input = File.Open(
+                this.saveResourceDialog.FileName,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite))
+            {
+                entry.Data = input.ReadToMemoryStream(input.Length);
             }
         }
 
@@ -243,7 +267,7 @@ namespace Gibbed.Illusion.ExploreSDS
             this.OpenEntry(this.entryTreeView.SelectedNode);
         }
 
-        private void OnSave(object sender, EventArgs e)
+        private void OnSaveArchive(object sender, EventArgs e)
         {
             if (this.saveArchiveDialog.ShowDialog() != DialogResult.OK)
             {
