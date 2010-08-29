@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ArchiveViewer));
             this.entryTreeView = new System.Windows.Forms.TreeView();
             this.resourceMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.openResourceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewResourceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.loadResourceFromFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveResourceToFileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,6 +41,7 @@
             this.saveArchiveButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.viewResourceButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.loadResourceFromFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveResourceToFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveResourceDialog = new System.Windows.Forms.SaveFileDialog();
@@ -48,7 +49,6 @@
             this.hintLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.saveArchiveDialog = new System.Windows.Forms.SaveFileDialog();
             this.openResourceDialog = new System.Windows.Forms.OpenFileDialog();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.resourceMenuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -70,20 +70,20 @@
             // resourceMenuStrip
             // 
             this.resourceMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openResourceMenuItem,
+            this.viewResourceMenuItem,
             this.toolStripMenuItem1,
             this.loadResourceFromFileMenuItem,
             this.saveResourceToFileMenuItem});
             this.resourceMenuStrip.Name = "entryMenuStrip";
             this.resourceMenuStrip.Size = new System.Drawing.Size(178, 76);
             // 
-            // openResourceMenuItem
+            // viewResourceMenuItem
             // 
-            this.openResourceMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openResourceMenuItem.Image")));
-            this.openResourceMenuItem.Name = "openResourceMenuItem";
-            this.openResourceMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.openResourceMenuItem.Text = "&Open";
-            this.openResourceMenuItem.Click += new System.EventHandler(this.OnOpenEntry2);
+            this.viewResourceMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("viewResourceMenuItem.Image")));
+            this.viewResourceMenuItem.Name = "viewResourceMenuItem";
+            this.viewResourceMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.viewResourceMenuItem.Text = "&View";
+            this.viewResourceMenuItem.Click += new System.EventHandler(this.OnOpenEntry2);
             // 
             // toolStripMenuItem1
             // 
@@ -159,6 +159,11 @@
             this.viewResourceButton.Text = "View Resource";
             this.viewResourceButton.Click += new System.EventHandler(this.OnOpenEntry2);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // loadResourceFromFileButton
             // 
             this.loadResourceFromFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
@@ -206,11 +211,6 @@
             // 
             this.openResourceDialog.Filter = "All Files (*.*)|*.*";
             // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
-            // 
             // ArchiveViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -243,7 +243,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton viewResourceButton;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem openResourceMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewResourceMenuItem;
         private System.Windows.Forms.ToolStripButton saveArchiveButton;
         private System.Windows.Forms.SaveFileDialog saveArchiveDialog;
         private System.Windows.Forms.ToolStripButton loadResourceFromFileButton;

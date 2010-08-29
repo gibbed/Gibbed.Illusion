@@ -20,6 +20,11 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             return this.Name;
         }
 
+        public void Serialize(DataStorage.FileHeader header, Stream input)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Deserialize(DataStorage.FileHeader header, Stream input)
         {
             this.NameHash = input.ReadValueU64();

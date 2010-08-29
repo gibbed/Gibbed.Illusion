@@ -57,6 +57,8 @@
     <Compile Include="FNV.cs" />
     <Compile Include="IResourceType.cs" />
     <Compile Include="ResourceTypes\MemFileResource.cs" />
+    <Compile Include="ResourceTypes\ScriptData.cs" />
+    <Compile Include="ResourceTypes\ScriptResource.cs" />
     <Compile Include="ResourceTypes\TableData.cs" />
     <Compile Include="ResourceTypes\TableResource.cs" />
     <Compile Include="ResourceTypes\XmlResource.cs" />

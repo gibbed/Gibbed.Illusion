@@ -15,16 +15,16 @@ namespace Gibbed.Illusion.ExploreSDS
 
         public void LoadFile(FileFormats.SdsMemory.Entry entry)
         {
-            var xml = new FileFormats.ResourceTypes.XmlResource();
-            xml.Deserialize(entry.Header, entry.Data);
+            var resource = new FileFormats.ResourceTypes.XmlResource();
+            resource.Deserialize(entry.Header, entry.Data);
 
-            this.Text += ": " + xml.Name + " (" + xml.Tag + ")";
+            this.Text += ": " + resource.Name + " (" + resource.Tag + ")";
             
-            this.contentTextBox.Text = xml.Content;
+            this.contentTextBox.Text = resource.Content;
             this.contentTextBox.Select(0, 0);
 
             this.Entry = entry;
-            this.Resource = xml;
+            this.Resource = resource;
 
             if (this.Resource.Unk3 == true)
             {

@@ -255,6 +255,15 @@ namespace Gibbed.Illusion.ExploreSDS
                 viewer.LoadFile(entry.Header, entry);
                 viewer.Show();
             }
+            else if (type.Name == "Script")
+            {
+                var viewer = new ScriptViewer()
+                {
+                    MdiParent = this.MdiParent,
+                };
+                viewer.LoadFile(entry.Header, entry);
+                viewer.Show();
+            }
         }
 
         private void OnOpenEntry1(object sender, TreeNodeMouseClickEventArgs e)

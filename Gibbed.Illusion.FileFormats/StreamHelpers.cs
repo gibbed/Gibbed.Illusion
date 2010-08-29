@@ -77,6 +77,18 @@ namespace Gibbed.Illusion.FileFormats
             return stream.ReadString(length);
         }
 
+        public static void WriteStringU16(this Stream stream, string value)
+        {
+            stream.WriteStringU16(value, true);
+        }
+
+        public static void WriteStringU16(this Stream stream, string value, bool littleEndian)
+        {
+            ushort length = (ushort)value.Length;
+            stream.WriteValueU16(length, littleEndian);
+            stream.WriteString(length == value.Length ? value : value.Substring(0, length));
+        }
+
         public static string ReadStringU32(this Stream stream)
         {
             return stream.ReadStringU32(true);

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Gibbed.Helpers;
 
@@ -8,6 +9,11 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
     {
         public List<TableData> Tables =
             new List<TableData>();
+
+        public void Serialize(DataStorage.FileHeader header, Stream input)
+        {
+            throw new NotImplementedException();
+        }
 
         public void Deserialize(DataStorage.FileHeader header, Stream input)
         {
