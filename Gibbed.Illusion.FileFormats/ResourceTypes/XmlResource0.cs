@@ -19,37 +19,23 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             var nav = xml.CreateNavigator();
 
             nav.MoveToRoot();
-            
-            var roots = nav.SelectChildren(XPathNodeType.Element);
-            if (roots.Count != 1 ||
-                roots.MoveNext() == false ||
-                roots.Current.HasAttributes == true)
+
+            var children = nav.SelectChildren(XPathNodeType.Element);
+            if (children.Count != 1 ||
+                children.MoveNext() == false)
             {
                 throw new InvalidOperationException();
             }
 
-            var super = new NodeEntry()
+            var root = new NodeEntry()
             {
                 Name = null,
                 Value = null,
                 Id = 0,
             };
-            super.Children.Add(1);
-            nodes.Add(super);
-
-            var root = new NodeEntry()
-            {
-                Name = new Value4() { Value = roots.Current.Name },
-                Value = null,
-                Id = 1,
-            };
             nodes.Add(root);
 
-            var children = roots.Current.SelectChildren(XPathNodeType.Element);
-            while (children.MoveNext() == true)
-            {
-                ReadXmlNode(nodes, root, children.Current);
-            }
+            ReadXmlNode(nodes, root, children.Current);
 
             var valueData = new MemoryStream();
             valueData.WriteValueU32(4);
