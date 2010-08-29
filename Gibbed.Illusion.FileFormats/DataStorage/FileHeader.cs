@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
-    public class FileHeader
+    public class FileHeader : ICloneable
     {
         public uint TypeId;
         public uint Size; // includes headers (such as the first 30 bytes)
@@ -33,6 +34,20 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
             this.SlotVramRequired = input.ReadValueU32(littleEndian);
             this.OtherRamRequired = input.ReadValueU32(littleEndian);
             this.OtherVramRequired = input.ReadValueU32(littleEndian);
+        }
+
+        public object Clone()
+        {
+            return new FileHeader()
+            {
+                TypeId = this.TypeId,
+                Size = this.Size,
+                Version = this.Version,
+                SlotRamRequired = this.SlotRamRequired,
+                SlotVramRequired = this.SlotVramRequired,
+                OtherRamRequired = this.OtherRamRequired,
+                OtherVramRequired = this.OtherVramRequired,
+            };
         }
     }
 }

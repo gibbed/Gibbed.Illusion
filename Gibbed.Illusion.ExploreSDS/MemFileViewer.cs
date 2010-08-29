@@ -13,10 +13,10 @@ namespace Gibbed.Illusion.ExploreSDS
             InitializeComponent();
         }
 
-        public void LoadFile(FileFormats.DataStorage.FileHeader header, Stream data)
+        public void LoadFile(FileFormats.DataStorage.FileHeader header, FileFormats.SdsMemory.Entry entry)
         {
             var memFile = new FileFormats.ResourceTypes.MemFileResource();
-            memFile.Deserialize(header, data);
+            memFile.Deserialize(header, entry.Data);
 
             this.Text += ": " + memFile.Name;
             this.hexBox.ByteProvider = new DynamicByteProvider(memFile.Data);

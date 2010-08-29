@@ -31,30 +31,30 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ArchiveViewer));
             this.entryTreeView = new System.Windows.Forms.TreeView();
-            this.entryMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.saveRawToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resourceMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openResourceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.resourceTypeImageList = new System.Windows.Forms.ImageList(this.components);
+            this.saveRawResourceMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.typeImageList = new System.Windows.Forms.ImageList(this.components);
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.saveUncompressedDataButton = new System.Windows.Forms.ToolStripButton();
-            this.saveEntryButton = new System.Windows.Forms.ToolStripButton();
+            this.saveArchiveButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.openEntryButton = new System.Windows.Forms.ToolStripButton();
+            this.openResourceButton = new System.Windows.Forms.ToolStripButton();
+            this.saveRawResourceButton = new System.Windows.Forms.ToolStripButton();
             this.saveRawDialog = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.hintLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.entryMenuStrip.SuspendLayout();
+            this.saveArchiveDialog = new System.Windows.Forms.SaveFileDialog();
+            this.resourceMenuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
-            this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // entryTreeView
             // 
-            this.entryTreeView.ContextMenuStrip = this.entryMenuStrip;
+            this.entryTreeView.ContextMenuStrip = this.resourceMenuStrip;
             this.entryTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.entryTreeView.ImageIndex = 0;
-            this.entryTreeView.ImageList = this.resourceTypeImageList;
+            this.entryTreeView.ImageList = this.typeImageList;
             this.entryTreeView.Location = new System.Drawing.Point(0, 25);
             this.entryTreeView.Name = "entryTreeView";
             this.entryTreeView.SelectedImageIndex = 0;
@@ -63,94 +63,96 @@
             this.entryTreeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OnOpenEntry1);
             this.entryTreeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.OnSelectEntry);
             // 
-            // entryMenuStrip
+            // resourceMenuStrip
             // 
-            this.entryMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveRawToolStripMenuItem,
+            this.resourceMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openResourceMenuItem,
             this.toolStripMenuItem1,
-            this.openToolStripMenuItem});
-            this.entryMenuStrip.Name = "entryMenuStrip";
-            this.entryMenuStrip.Size = new System.Drawing.Size(124, 54);
+            this.saveRawResourceMenuItem});
+            this.resourceMenuStrip.Name = "entryMenuStrip";
+            this.resourceMenuStrip.Size = new System.Drawing.Size(124, 54);
             // 
-            // saveRawToolStripMenuItem
+            // openResourceMenuItem
             // 
-            this.saveRawToolStripMenuItem.Name = "saveRawToolStripMenuItem";
-            this.saveRawToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.saveRawToolStripMenuItem.Text = "Save &Raw";
-            this.saveRawToolStripMenuItem.Click += new System.EventHandler(this.OnSaveRawEntry);
+            this.openResourceMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openResourceMenuItem.Image")));
+            this.openResourceMenuItem.Name = "openResourceMenuItem";
+            this.openResourceMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.openResourceMenuItem.Text = "&Open";
+            this.openResourceMenuItem.Click += new System.EventHandler(this.OnOpenEntry2);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(120, 6);
             // 
-            // openToolStripMenuItem
+            // saveRawResourceMenuItem
             // 
-            this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
-            this.openToolStripMenuItem.Text = "&Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenEntry2);
+            this.saveRawResourceMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("saveRawResourceMenuItem.Image")));
+            this.saveRawResourceMenuItem.Name = "saveRawResourceMenuItem";
+            this.saveRawResourceMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.saveRawResourceMenuItem.Text = "Save &Raw";
+            this.saveRawResourceMenuItem.Click += new System.EventHandler(this.OnSaveRawEntry);
             // 
-            // resourceTypeImageList
+            // typeImageList
             // 
-            this.resourceTypeImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("resourceTypeImageList.ImageStream")));
-            this.resourceTypeImageList.TransparentColor = System.Drawing.Color.Transparent;
-            this.resourceTypeImageList.Images.SetKeyName(0, "Unknown");
-            this.resourceTypeImageList.Images.SetKeyName(1, "SDS");
-            this.resourceTypeImageList.Images.SetKeyName(2, "MemFile");
-            this.resourceTypeImageList.Images.SetKeyName(3, "XML");
-            this.resourceTypeImageList.Images.SetKeyName(4, "Table");
-            this.resourceTypeImageList.Images.SetKeyName(5, "Script");
-            this.resourceTypeImageList.Images.SetKeyName(6, "Texture");
-            this.resourceTypeImageList.Images.SetKeyName(7, "Sound");
-            this.resourceTypeImageList.Images.SetKeyName(8, "Cutscene");
+            this.typeImageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("typeImageList.ImageStream")));
+            this.typeImageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.typeImageList.Images.SetKeyName(0, "Unknown");
+            this.typeImageList.Images.SetKeyName(1, "SDS");
+            this.typeImageList.Images.SetKeyName(2, "MemFile");
+            this.typeImageList.Images.SetKeyName(3, "XML");
+            this.typeImageList.Images.SetKeyName(4, "Table");
+            this.typeImageList.Images.SetKeyName(5, "Script");
+            this.typeImageList.Images.SetKeyName(6, "Texture");
+            this.typeImageList.Images.SetKeyName(7, "Sound");
+            this.typeImageList.Images.SetKeyName(8, "Cutscene");
             // 
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveUncompressedDataButton,
-            this.saveEntryButton,
+            this.saveArchiveButton,
             this.toolStripSeparator1,
-            this.openEntryButton});
+            this.openResourceButton,
+            this.saveRawResourceButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(480, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
-            // saveUncompressedDataButton
+            // saveArchiveButton
             // 
-            this.saveUncompressedDataButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveUncompressedDataButton.Image = ((System.Drawing.Image)(resources.GetObject("saveUncompressedDataButton.Image")));
-            this.saveUncompressedDataButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveUncompressedDataButton.Name = "saveUncompressedDataButton";
-            this.saveUncompressedDataButton.Size = new System.Drawing.Size(23, 22);
-            this.saveUncompressedDataButton.Text = "Save Archive Data";
-            this.saveUncompressedDataButton.Click += new System.EventHandler(this.OnSaveRawArchive);
-            // 
-            // saveEntryButton
-            // 
-            this.saveEntryButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveEntryButton.Image = ((System.Drawing.Image)(resources.GetObject("saveEntryButton.Image")));
-            this.saveEntryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveEntryButton.Name = "saveEntryButton";
-            this.saveEntryButton.Size = new System.Drawing.Size(23, 22);
-            this.saveEntryButton.Text = "Save Raw Data";
-            this.saveEntryButton.Click += new System.EventHandler(this.OnSaveRawEntry);
+            this.saveArchiveButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveArchiveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveArchiveButton.Image")));
+            this.saveArchiveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveArchiveButton.Name = "saveArchiveButton";
+            this.saveArchiveButton.Size = new System.Drawing.Size(23, 22);
+            this.saveArchiveButton.Text = "Save Archive";
+            this.saveArchiveButton.Click += new System.EventHandler(this.OnSave);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // openEntryButton
+            // openResourceButton
             // 
-            this.openEntryButton.Image = ((System.Drawing.Image)(resources.GetObject("openEntryButton.Image")));
-            this.openEntryButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.openEntryButton.Name = "openEntryButton";
-            this.openEntryButton.Size = new System.Drawing.Size(83, 22);
-            this.openEntryButton.Text = "Open Data";
-            this.openEntryButton.Click += new System.EventHandler(this.OnOpenEntry2);
+            this.openResourceButton.Image = ((System.Drawing.Image)(resources.GetObject("openResourceButton.Image")));
+            this.openResourceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openResourceButton.Name = "openResourceButton";
+            this.openResourceButton.Size = new System.Drawing.Size(107, 22);
+            this.openResourceButton.Text = "Open Resource";
+            this.openResourceButton.Click += new System.EventHandler(this.OnOpenEntry2);
+            // 
+            // saveRawResourceButton
+            // 
+            this.saveRawResourceButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.saveRawResourceButton.Image = ((System.Drawing.Image)(resources.GetObject("saveRawResourceButton.Image")));
+            this.saveRawResourceButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveRawResourceButton.Name = "saveRawResourceButton";
+            this.saveRawResourceButton.Size = new System.Drawing.Size(23, 22);
+            this.saveRawResourceButton.Text = "Save Raw Data";
+            this.saveRawResourceButton.Click += new System.EventHandler(this.OnSaveRawEntry);
             // 
             // saveRawDialog
             // 
@@ -158,8 +160,6 @@
             // 
             // statusStrip
             // 
-            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.hintLabel});
             this.statusStrip.Location = new System.Drawing.Point(0, 218);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(480, 22);
@@ -172,6 +172,11 @@
             this.hintLabel.Size = new System.Drawing.Size(30, 17);
             this.hintLabel.Text = "Hint";
             // 
+            // saveArchiveDialog
+            // 
+            this.saveArchiveDialog.DefaultExt = "sds";
+            this.saveArchiveDialog.Filter = "Illusion SDS archives (*.sds)|*.sds|All Files (*.*)|*.*";
+            // 
             // ArchiveViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -182,12 +187,9 @@
             this.Controls.Add(this.toolStrip);
             this.Name = "ArchiveViewer";
             this.Text = "Archive";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.OnClosed);
-            this.entryMenuStrip.ResumeLayout(false);
+            this.resourceMenuStrip.ResumeLayout(false);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
-            this.statusStrip.ResumeLayout(false);
-            this.statusStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -197,17 +199,18 @@
 
         private System.Windows.Forms.TreeView entryTreeView;
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton saveUncompressedDataButton;
-        private System.Windows.Forms.ImageList resourceTypeImageList;
-        private System.Windows.Forms.ContextMenuStrip entryMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem saveRawToolStripMenuItem;
+        private System.Windows.Forms.ImageList typeImageList;
+        private System.Windows.Forms.ContextMenuStrip resourceMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem saveRawResourceMenuItem;
         private System.Windows.Forms.SaveFileDialog saveRawDialog;
-        private System.Windows.Forms.ToolStripButton saveEntryButton;
+        private System.Windows.Forms.ToolStripButton saveRawResourceButton;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripStatusLabel hintLabel;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripButton openEntryButton;
+        private System.Windows.Forms.ToolStripButton openResourceButton;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openResourceMenuItem;
+        private System.Windows.Forms.ToolStripButton saveArchiveButton;
+        private System.Windows.Forms.SaveFileDialog saveArchiveDialog;
     }
 }

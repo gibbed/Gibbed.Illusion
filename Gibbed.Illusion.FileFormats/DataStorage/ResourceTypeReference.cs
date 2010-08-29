@@ -4,7 +4,7 @@ using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
-    public class ResourceTypeReference
+    public class ResourceTypeReference : ICloneable
     {
         public uint Id { get; private set; }
         public string Name { get; private set; }
@@ -22,6 +22,16 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
             this.Id = input.ReadValueU32(littleEndian);
             this.Name = input.ReadStringU32(littleEndian);
             this.Parent = input.ReadValueU32(littleEndian);
+        }
+
+        public object Clone()
+        {
+            return new ResourceTypeReference()
+            {
+                Id = this.Id,
+                Name = this.Name,
+                Parent = this.Parent,
+            };
         }
     }
 }

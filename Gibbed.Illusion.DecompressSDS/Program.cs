@@ -55,7 +55,7 @@ namespace Gibbed.Illusion.DecompressSDS
             }
 
             string inputPath = extras[0];
-            string outputPath = extras.Count > 1 ? extras[1] : Path.ChangeExtension(inputPath, "_decompressed.sds");
+            string outputPath = extras.Count > 1 ? extras[1] : (Path.ChangeExtension(inputPath, null) + "_decompressed.sds");
 
             var archive = new FileFormats.SdsReader();
             archive.Open(inputPath);

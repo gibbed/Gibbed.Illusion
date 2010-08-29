@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
+using Gibbed.Helpers;
+using Gibbed.Illusion.FileFormats;
 
 namespace Gibbed.Illusion.ExploreSDS
 {
     public partial class ArchiveViewer : Form
     {
         private string FilePath;
-        private FileFormats.SdsReader Reader;
+        private FileFormats.SdsMemory Archive;
 
         public ArchiveViewer()
         {
@@ -21,11 +24,12 @@ namespace Gibbed.Illusion.ExploreSDS
         {
             this.Text += string.Format(": {0}", Path.GetFileName(path));
 
+            this.FilePath = path;
+
             var reader = new FileFormats.SdsReader();
             reader.Open(path);
-
-            this.FilePath = path;
-            this.Reader = reader;
+            this.Archive = reader.LoadToMemory();
+            reader.Close();
 
             this.BuildEntryTree();
         }
@@ -40,7 +44,7 @@ namespace Gibbed.Illusion.ExploreSDS
             root.SelectedImageKey = "SDS";
 
             var typeNodes = new Dictionary<string, TreeNode>();
-            foreach (var type in this.Reader.ResourceTypes)
+            foreach (var type in this.Archive.ResourceTypes)
             {
                 var node = new TreeNode(type.Name);
                 
@@ -58,7 +62,7 @@ namespace Gibbed.Illusion.ExploreSDS
                 typeNodes.Add(type.Name, node);
             }
 
-            foreach (var type in this.Reader.ResourceTypes)
+            foreach (var type in this.Archive.ResourceTypes)
             {
                 if (type.Parent == 0)
                 {
@@ -66,7 +70,7 @@ namespace Gibbed.Illusion.ExploreSDS
                 }
                 else
                 {
-                    var parent = this.Reader.ResourceTypes.SingleOrDefault(
+                    var parent = this.Archive.ResourceTypes.SingleOrDefault(
                         r => r.Id == type.Id + type.Parent);
                     
                     if (parent == null)
@@ -89,9 +93,9 @@ namespace Gibbed.Illusion.ExploreSDS
                 }
             }
 
-            foreach (var entry in this.Reader.Entries)
+            foreach (var entry in this.Archive.Entries)
             {
-                var type = this.Reader.ResourceTypes.SingleOrDefault(
+                var type = this.Archive.ResourceTypes.SingleOrDefault(
                     r => r.Id == entry.TypeId);
                 if (type == null)
                 {
@@ -112,17 +116,6 @@ namespace Gibbed.Illusion.ExploreSDS
             this.entryTreeView.EndUpdate();
         }
 
-        private void OnSaveRawArchive(object sender, EventArgs e)
-        {
-            this.saveRawDialog.FileName = Path.ChangeExtension(Path.GetFileName(this.FilePath), ".data");
-            if (this.saveRawDialog.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            this.Reader.ExportData(this.saveRawDialog.FileName);
-        }
-
         private void OnSaveRawEntry(object sender, EventArgs e)
         {
             if (this.entryTreeView.SelectedNode == null)
@@ -131,13 +124,13 @@ namespace Gibbed.Illusion.ExploreSDS
             }
 
             var entry = this.entryTreeView.SelectedNode.Tag as
-                FileFormats.SdsReader.Entry;
+                FileFormats.SdsMemory.Entry;
             if (entry == null)
             {
                 return;
             }
 
-            var type = this.Reader.ResourceTypes.SingleOrDefault(
+            var type = this.Archive.ResourceTypes.SingleOrDefault(
                 r => r.Id == entry.TypeId);
             if (type == null)
             {
@@ -157,14 +150,13 @@ namespace Gibbed.Illusion.ExploreSDS
                 return;
             }
 
-            this.Reader.ExportEntry(entry, this.saveRawDialog.FileName);
-        }
-
-        private void OnClosed(object sender, FormClosedEventArgs e)
-        {
-            if (this.Reader != null)
+            using (var output = File.Open(
+                this.saveRawDialog.FileName,
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.ReadWrite))
             {
-                this.Reader.Close();
+                output.WriteFromStream(entry.Data, entry.Data.Length);
             }
         }
 
@@ -177,17 +169,16 @@ namespace Gibbed.Illusion.ExploreSDS
             }
 
             var entry = this.entryTreeView.SelectedNode.Tag as
-                FileFormats.SdsReader.Entry;
+                FileFormats.SdsMemory.Entry;
             if (entry == null)
             {
                 this.hintLabel.Text = "";
                 return;
             }
 
-            this.hintLabel.Text = string.Format("Version {0}, @ 0x{1:X8}, {2} bytes",
+            this.hintLabel.Text = string.Format("Version {0}, {1} bytes",
                 entry.Header.Version,
-                entry.Offset,
-                entry.Size);
+                entry.Data.Length);
         }
 
         private void OpenEntry(TreeNode node)
@@ -198,18 +189,20 @@ namespace Gibbed.Illusion.ExploreSDS
             }
 
             var entry = node.Tag as
-                FileFormats.SdsReader.Entry;
+                FileFormats.SdsMemory.Entry;
             if (entry == null)
             {
                 return;
             }
 
-            var type = this.Reader.ResourceTypes.SingleOrDefault(
+            var type = this.Archive.ResourceTypes.SingleOrDefault(
                 r => r.Id == entry.TypeId);
             if (type == null)
             {
                 throw new KeyNotFoundException();
             }
+
+            entry.Data.Position = 0;
 
             if (type.Name == "XML")
             {
@@ -217,7 +210,7 @@ namespace Gibbed.Illusion.ExploreSDS
                 {
                     MdiParent = this.MdiParent,
                 };
-                viewer.LoadFile(entry.Header, this.Reader.GetEntry(entry));
+                viewer.LoadFile(entry);
                 viewer.Show();
             }
             else if (type.Name == "MemFile")
@@ -226,7 +219,7 @@ namespace Gibbed.Illusion.ExploreSDS
                 {
                     MdiParent = this.MdiParent,
                 };
-                viewer.LoadFile(entry.Header, this.Reader.GetEntry(entry));
+                viewer.LoadFile(entry.Header, entry);
                 viewer.Show();
             }
             else if (type.Name == "Table")
@@ -235,7 +228,7 @@ namespace Gibbed.Illusion.ExploreSDS
                 {
                     MdiParent = this.MdiParent,
                 };
-                viewer.LoadFile(entry.Header, this.Reader.GetEntry(entry));
+                viewer.LoadFile(entry.Header, entry);
                 viewer.Show();
             }
         }
@@ -248,6 +241,70 @@ namespace Gibbed.Illusion.ExploreSDS
         private void OnOpenEntry2(object sender, EventArgs e)
         {
             this.OpenEntry(this.entryTreeView.SelectedNode);
+        }
+
+        private void OnSave(object sender, EventArgs e)
+        {
+            if (this.saveArchiveDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            using (var output = File.Open(
+                this.saveArchiveDialog.FileName,
+                FileMode.Create,
+                FileAccess.Write,
+                FileShare.ReadWrite))
+            {
+                var data = new MemoryStream();
+                foreach (var entry in this.Archive.Entries)
+                {
+                    var entryHeaderData = new MemoryStream();
+                    entry.Header.Size = (uint)(30 + entry.Data.Length);
+                    entry.Header.Serialize(entryHeaderData, true);
+                    data.WriteFromMemoryStreamSafe(entryHeaderData, true);
+                    entry.Data.Position = 0;
+                    data.WriteFromStream(entry.Data, entry.Data.Length);
+                }
+                data.Position = 0;
+
+                output.WriteString("SDS\0", Encoding.ASCII);
+                output.WriteValueU32(19);
+                output.WriteString("PC\0\0", Encoding.ASCII);
+                output.WriteValueU32(0x5FFB74F3);
+
+                output.Seek(72, SeekOrigin.Begin);
+                {
+                    this.Archive.Header.ResourceTypeTableOffset = (uint)output.Position;
+                    output.WriteValueS32(this.Archive.ResourceTypes.Count);
+                    foreach (var resourceType in this.Archive.ResourceTypes)
+                    {
+                        resourceType.Serialize(output, true);
+                    }
+                }
+
+                this.Archive.Header.BlockTableOffset = (uint)output.Position;
+
+                output.WriteValueU32(0x6C7A4555);
+                output.WriteValueU32((uint)data.Length);
+                output.WriteValueU8(4);
+
+                output.WriteValueU32((uint)data.Length);
+                output.WriteValueU8(0);
+                output.WriteFromStream(data, (uint)data.Length);
+
+                output.WriteValueU32(0);
+                output.WriteValueU8(0);
+
+                this.Archive.Header.XmlOffset = (uint)output.Position;
+                output.WriteString(this.Archive.Xml);
+
+                output.Seek(16, SeekOrigin.Begin);
+
+                var headerData = new MemoryStream();
+                this.Archive.Header.Serialize(headerData, true);
+                output.WriteFromMemoryStreamSafe(headerData, true);
+            }
         }
     }
 }

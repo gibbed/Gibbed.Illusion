@@ -79,10 +79,10 @@ namespace Gibbed.Illusion.ExploreSDS
             this.ColumnNames.Add(FileFormats.FNV.Hash32(name), name);
         }
 
-        public void LoadFile(FileFormats.DataStorage.FileHeader header, Stream data)
+        public void LoadFile(FileFormats.DataStorage.FileHeader header, FileFormats.SdsMemory.Entry entry)
         {
             var tables = new FileFormats.ResourceTypes.TableResource();
-            tables.Deserialize(header, data);
+            tables.Deserialize(header, entry.Data);
 
             this.comboBox.Items.Clear();
             foreach (var table in tables.Tables)

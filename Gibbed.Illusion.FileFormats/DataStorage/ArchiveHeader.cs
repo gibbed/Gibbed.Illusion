@@ -1,9 +1,10 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Gibbed.Helpers;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
-    public class ArchiveHeader
+    public class ArchiveHeader : ICloneable
     {
         public uint ResourceTypeTableOffset;
         public uint BlockTableOffset;
@@ -43,6 +44,23 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
             this.Unknown20 = new byte[16];
             input.Read(this.Unknown20, 0, this.Unknown20.Length);
             this.FileCount = input.ReadValueU32(littleEndian);
+        }
+
+        public object Clone()
+        {
+            return new ArchiveHeader()
+            {
+                ResourceTypeTableOffset = this.ResourceTypeTableOffset,
+                BlockTableOffset = this.BlockTableOffset,
+                XmlOffset = this.XmlOffset,
+                SlotRamRequired = this.SlotRamRequired,
+                SlotVramRequired = this.SlotVramRequired,
+                OtherRamRequired = this.OtherRamRequired,
+                OtherVramRequired = this.OtherVramRequired,
+                Unknown1C = this.Unknown1C,
+                Unknown20 = (byte[])this.Unknown20.Clone(),
+                FileCount = this.FileCount,
+            };
         }
     }
 }

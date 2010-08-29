@@ -52,7 +52,7 @@ namespace Gibbed.Illusion.DecryptSDS
             }
 
             string inputPath = extras[0];
-            string outputPath = extras.Count > 1 ? extras[1] : Path.ChangeExtension(inputPath, "_decrypted.sds");
+            string outputPath = extras.Count > 1 ? extras[1] : (Path.ChangeExtension(inputPath, null) + "_decrypted.sds");
 
             using (var input = File.Open(inputPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
             {

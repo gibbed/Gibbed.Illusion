@@ -19,7 +19,7 @@ namespace Gibbed.Illusion.FileFormats
         public List<DataStorage.ResourceTypeReference> ResourceTypes =
             new List<DataStorage.ResourceTypeReference>();
 
-        public string Xml { get; private set; }
+        public string Xml;
 
         public List<Entry> Entries =
             new List<Entry>();
@@ -371,7 +371,35 @@ namespace Gibbed.Illusion.FileFormats
                 memory.Position = 0;
             }
 
-            this.BlockStream.FreeLoadedBlocks();
+            //this.BlockStream.FreeLoadedBlocks();
+            return memory;
+        }
+
+        public SdsMemory LoadToMemory()
+        {
+            var memory = new SdsMemory();
+            
+            memory.Header = (DataStorage.ArchiveHeader)this.Header.Clone();
+            
+            memory.ResourceTypes.Clear();
+            foreach (var resourceType in this.ResourceTypes)
+            {
+                memory.ResourceTypes.Add((DataStorage.ResourceTypeReference)resourceType.Clone());
+            }
+
+            memory.Entries.Clear();
+            foreach (var entry in this.Entries)
+            {
+                memory.Entries.Add(new SdsMemory.Entry()
+                    {
+                        Header = (DataStorage.FileHeader)entry.Header.Clone(),
+                        Description = entry.Description,
+                        Data = this.GetEntry(entry),
+                    });
+            }
+
+            memory.Xml = this.Xml;
+
             return memory;
         }
     }
