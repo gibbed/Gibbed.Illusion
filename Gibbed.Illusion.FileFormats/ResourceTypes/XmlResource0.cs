@@ -23,8 +23,7 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             var roots = nav.SelectChildren(XPathNodeType.Element);
             if (roots.Count != 1 ||
                 roots.MoveNext() == false ||
-                roots.Current.HasAttributes == true ||
-                string.IsNullOrEmpty(roots.Current.Value) == false)
+                roots.Current.HasAttributes == true)
             {
                 throw new InvalidOperationException();
             }
@@ -161,20 +160,25 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
             }
 
             var children = nav.SelectChildren(XPathNodeType.Element);
-            while (children.MoveNext() == true)
+            if (children.Count > 0)
             {
-                ReadXmlNode(nodes, node, children.Current);
-            }
-
-            if (string.IsNullOrEmpty(nav.Value) == false)
-            {
-                if (type1 == true)
+                while (children.MoveNext() == true)
                 {
-                    node.Value = new Value1() { Value = nav.Value };
+                    ReadXmlNode(nodes, node, children.Current);
                 }
-                else
+            }
+            else
+            {
+                if (string.IsNullOrEmpty(nav.Value) == false)
                 {
-                    node.Value = new Value4() { Value = nav.Value };
+                    if (type1 == true)
+                    {
+                        node.Value = new Value1() { Value = nav.Value };
+                    }
+                    else
+                    {
+                        node.Value = new Value4() { Value = nav.Value };
+                    }
                 }
             }
         }
