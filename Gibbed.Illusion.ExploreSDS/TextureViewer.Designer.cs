@@ -35,6 +35,7 @@
             this.loadFromFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveToFileButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.toggleAlphaButton = new System.Windows.Forms.ToolStripButton();
             this.previewPanel = new System.Windows.Forms.Panel();
             this.previewPictureBox = new System.Windows.Forms.PictureBox();
@@ -53,10 +54,11 @@
             this.loadFromFileButton,
             this.saveToFileButton,
             this.toolStripSeparator2,
+            this.toolStripButton1,
             this.toggleAlphaButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(320, 25);
+            this.toolStrip.Size = new System.Drawing.Size(480, 25);
             this.toolStrip.TabIndex = 5;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -97,6 +99,19 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.Checked = true;
+            this.toolStripButton1.CheckOnClick = true;
+            this.toolStripButton1.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton1.Text = "zoomButton";
+            this.toolStripButton1.Click += new System.EventHandler(this.OnZoom);
+            // 
             // toggleAlphaButton
             // 
             this.toggleAlphaButton.Checked = true;
@@ -117,7 +132,7 @@
             this.previewPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.previewPanel.Location = new System.Drawing.Point(0, 25);
             this.previewPanel.Name = "previewPanel";
-            this.previewPanel.Size = new System.Drawing.Size(320, 215);
+            this.previewPanel.Size = new System.Drawing.Size(480, 295);
             this.previewPanel.TabIndex = 6;
             // 
             // previewPictureBox
@@ -142,7 +157,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(320, 240);
+            this.ClientSize = new System.Drawing.Size(480, 320);
             this.Controls.Add(this.previewPanel);
             this.Controls.Add(this.toolStrip);
             this.Name = "TextureViewer";
@@ -169,5 +184,6 @@
         private System.Windows.Forms.ToolStripButton toggleAlphaButton;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }

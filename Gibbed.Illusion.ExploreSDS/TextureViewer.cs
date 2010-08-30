@@ -45,10 +45,25 @@ namespace Gibbed.Illusion.ExploreSDS
 
             var image = dds.Image(true, true, true, this.toggleAlphaButton.Checked);
 
-            this.previewPictureBox.Image = image;
-            this.previewPictureBox.Width = image.Width;
-            this.previewPictureBox.Height = image.Height;
-            this.previewPictureBox.SizeMode = PictureBoxSizeMode.Normal;
+            if (this.toolStripButton1.Checked == true)
+            {
+                this.previewPictureBox.Dock = DockStyle.Fill;
+                this.previewPictureBox.Image = image;
+                this.previewPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            }
+            else
+            {
+                this.previewPictureBox.Dock = DockStyle.None;
+                this.previewPictureBox.Image = image;
+                this.previewPictureBox.Width = image.Width;
+                this.previewPictureBox.Height = image.Height;
+                this.previewPictureBox.SizeMode = PictureBoxSizeMode.Normal;
+            }
+        }
+
+        private void OnZoom(object sender, EventArgs e)
+        {
+            this.UpdatePreview();
         }
 
         private void OnToggleAlpha(object sender, EventArgs e)
