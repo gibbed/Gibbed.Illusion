@@ -61,6 +61,7 @@
     <Compile Include="ResourceTypes\ScriptResource.cs" />
     <Compile Include="ResourceTypes\TableData.cs" />
     <Compile Include="ResourceTypes\TableResource.cs" />
+    <Compile Include="ResourceTypes\TextureResource.cs" />
     <Compile Include="ResourceTypes\XmlResource.cs" />
     <Compile Include="ResourceTypes\XmlResource0.cs" />
     <Compile Include="ResourceTypes\XmlResource1.cs" />

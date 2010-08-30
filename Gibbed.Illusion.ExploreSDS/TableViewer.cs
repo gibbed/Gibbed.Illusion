@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Gibbed.Illusion.ExploreSDS
@@ -15,6 +17,13 @@ namespace Gibbed.Illusion.ExploreSDS
 
             // TODO: move this big list to an external file
             // I am lazy :effort:
+            this.AddColumnName("0");
+            this.AddColumnName("1");
+            this.AddColumnName("2");
+            this.AddColumnName("3");
+            this.AddColumnName("4");
+            this.AddColumnName("5");
+            this.AddColumnName("6");
             this.AddColumnName("Id");
             this.AddColumnName("ID");
             this.AddColumnName("Top");
@@ -95,38 +104,8 @@ namespace Gibbed.Illusion.ExploreSDS
             }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void OnLoadFromFile(object sender, EventArgs e)
         {
-            /*
-            var hashes = new List<uint>();
-
-            foreach (TabPage tab in this.tabControl.TabPages)
-            {
-                var table = tab.Tag as FileFormats.ResourceTypes.TableData;
-                if (table == null)
-                {
-                    continue;
-                }
-
-                foreach (var hash in table.Columns.Select(c => c.NameHash))
-                {
-                    if (hashes.Contains(hash) == false)
-                    {
-                        hashes.Add(hash);
-                    }
-                }
-            }
-
-            hashes.Sort();
-
-            var text = new StringBuilder();
-            foreach (var hash in hashes)
-            {
-                text.AppendLine(hash.ToString("X8"));
-            }
-
-            Clipboard.SetText(text.ToString());
-            */
         }
 
         private void OnSelectTable(object sender, EventArgs e)
@@ -164,6 +143,37 @@ namespace Gibbed.Illusion.ExploreSDS
                     column++;
                 }
             }
+        }
+
+        private void OnSaveToFile(object sender, EventArgs e)
+        {
+
+        }
+
+        private void OnCopyHashes(object sender, EventArgs e)
+        {
+            var hashes = new List<uint>();
+
+            foreach (FileFormats.ResourceTypes.TableData table in this.comboBox.Items)
+            {
+                foreach (var hash in table.Columns.Select(c => c.NameHash))
+                {
+                    if (hashes.Contains(hash) == false)
+                    {
+                        hashes.Add(hash);
+                    }
+                }
+            }
+
+            hashes.Sort();
+
+            var text = new StringBuilder();
+            foreach (var hash in hashes)
+            {
+                text.AppendLine(hash.ToString("X8"));
+            }
+
+            Clipboard.SetText(text.ToString());
         }
     }
 }

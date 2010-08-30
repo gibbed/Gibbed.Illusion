@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.ExploreSDS"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.DecompressSDS", "Gibbed.Illusion.DecompressSDS\Gibbed.Illusion.DecompressSDS.csproj", "{C83939E7-713A-4A67-B0E9-B003262EE8DA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Squish", "Gibbed.Squish\Gibbed.Squish.csproj", "{242D0738-AA4C-4C9C-A218-891A8F55559C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{C83939E7-713A-4A67-B0E9-B003262EE8DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C83939E7-713A-4A67-B0E9-B003262EE8DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C83939E7-713A-4A67-B0E9-B003262EE8DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{242D0738-AA4C-4C9C-A218-891A8F55559C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{242D0738-AA4C-4C9C-A218-891A8F55559C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{242D0738-AA4C-4C9C-A218-891A8F55559C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{242D0738-AA4C-4C9C-A218-891A8F55559C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

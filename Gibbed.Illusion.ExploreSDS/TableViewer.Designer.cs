@@ -29,44 +29,46 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(TableViewer));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.mainToolStrip = new System.Windows.Forms.ToolStrip();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.copyHashesButton = new System.Windows.Forms.ToolStripButton();
             this.comboBox = new System.Windows.Forms.ComboBox();
             this.dataGridView = new System.Windows.Forms.DataGridView();
-            this.toolStrip1.SuspendLayout();
+            this.saveButton = new System.Windows.Forms.ToolStripButton();
+            this.tableToolStrip = new System.Windows.Forms.ToolStrip();
+            this.loadFromFileButton = new System.Windows.Forms.ToolStripButton();
+            this.saveToFileButton = new System.Windows.Forms.ToolStripButton();
+            this.mainToolStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
+            this.tableToolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // toolStrip1
+            // mainToolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton1,
-            this.toolStripButton2});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(480, 25);
-            this.toolStrip1.TabIndex = 0;
-            this.toolStrip1.Text = "toolStrip1";
+            this.mainToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.saveButton,
+            this.toolStripSeparator1,
+            this.copyHashesButton});
+            this.mainToolStrip.Location = new System.Drawing.Point(0, 0);
+            this.mainToolStrip.Name = "mainToolStrip";
+            this.mainToolStrip.Size = new System.Drawing.Size(480, 25);
+            this.mainToolStrip.TabIndex = 0;
+            this.mainToolStrip.Text = "toolStrip1";
             // 
-            // toolStripButton1
+            // toolStripSeparator1
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "toolStripButton1";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton2
+            // copyHashesButton
             // 
-            this.toolStripButton2.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-            this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton2.Name = "toolStripButton2";
-            this.toolStripButton2.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton2.Text = "toolStripButton2";
+            this.copyHashesButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.copyHashesButton.Image = ((System.Drawing.Image)(resources.GetObject("copyHashesButton.Image")));
+            this.copyHashesButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.copyHashesButton.Name = "copyHashesButton";
+            this.copyHashesButton.Size = new System.Drawing.Size(23, 22);
+            this.copyHashesButton.Text = "Copy Hashes";
+            this.copyHashesButton.Click += new System.EventHandler(this.OnCopyHashes);
             // 
             // comboBox
             // 
@@ -83,24 +85,67 @@
             // 
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridView.Location = new System.Drawing.Point(0, 46);
+            this.dataGridView.Location = new System.Drawing.Point(0, 71);
             this.dataGridView.Name = "dataGridView";
-            this.dataGridView.Size = new System.Drawing.Size(480, 194);
+            this.dataGridView.Size = new System.Drawing.Size(480, 169);
             this.dataGridView.TabIndex = 2;
+            // 
+            // saveButton
+            // 
+            this.saveButton.Enabled = false;
+            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
+            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveButton.Name = "saveButton";
+            this.saveButton.Size = new System.Drawing.Size(51, 22);
+            this.saveButton.Text = "Save";
+            // 
+            // tableToolStrip
+            // 
+            this.tableToolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.loadFromFileButton,
+            this.saveToFileButton});
+            this.tableToolStrip.Location = new System.Drawing.Point(0, 46);
+            this.tableToolStrip.Name = "tableToolStrip";
+            this.tableToolStrip.Size = new System.Drawing.Size(480, 25);
+            this.tableToolStrip.TabIndex = 3;
+            this.tableToolStrip.Text = "toolStrip2";
+            // 
+            // loadFromFileButton
+            // 
+            this.loadFromFileButton.Enabled = false;
+            this.loadFromFileButton.Image = ((System.Drawing.Image)(resources.GetObject("loadFromFileButton.Image")));
+            this.loadFromFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.loadFromFileButton.Name = "loadFromFileButton";
+            this.loadFromFileButton.Size = new System.Drawing.Size(105, 22);
+            this.loadFromFileButton.Text = "Load From File";
+            this.loadFromFileButton.Click += new System.EventHandler(this.OnLoadFromFile);
+            // 
+            // saveToFileButton
+            // 
+            this.saveToFileButton.Enabled = false;
+            this.saveToFileButton.Image = ((System.Drawing.Image)(resources.GetObject("saveToFileButton.Image")));
+            this.saveToFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.saveToFileButton.Name = "saveToFileButton";
+            this.saveToFileButton.Size = new System.Drawing.Size(89, 22);
+            this.saveToFileButton.Text = "Save To File";
+            this.saveToFileButton.Click += new System.EventHandler(this.OnSaveToFile);
             // 
             // TableViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(480, 240);
+            this.ClientSize = new System.Drawing.Size(640, 320);
             this.Controls.Add(this.dataGridView);
+            this.Controls.Add(this.tableToolStrip);
             this.Controls.Add(this.comboBox);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.mainToolStrip);
             this.Name = "TableViewer";
             this.Text = "Table";
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.mainToolStrip.ResumeLayout(false);
+            this.mainToolStrip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
+            this.tableToolStrip.ResumeLayout(false);
+            this.tableToolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -108,10 +153,14 @@
 
         #endregion
 
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton toolStripButton1;
-        private System.Windows.Forms.ToolStripButton toolStripButton2;
+        private System.Windows.Forms.ToolStrip mainToolStrip;
         private System.Windows.Forms.ComboBox comboBox;
         private System.Windows.Forms.DataGridView dataGridView;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripButton copyHashesButton;
+        private System.Windows.Forms.ToolStripButton saveButton;
+        private System.Windows.Forms.ToolStrip tableToolStrip;
+        private System.Windows.Forms.ToolStripButton loadFromFileButton;
+        private System.Windows.Forms.ToolStripButton saveToFileButton;
     }
 }

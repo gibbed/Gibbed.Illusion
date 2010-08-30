@@ -96,6 +96,9 @@
     <EmbeddedResource Include="TableViewer.resx">
       <DependentUpon>TableViewer.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="TextureViewer.resx">
+      <DependentUpon>TextureViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="XmlViewer.resx">
       <DependentUpon>XmlViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -131,6 +134,12 @@
     <Compile Include="TableViewer.Designer.cs">
       <DependentUpon>TableViewer.cs</DependentUpon>
     </Compile>
+    <Compile Include="TextureViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TextureViewer.Designer.cs">
+      <DependentUpon>TextureViewer.cs</DependentUpon>
+    </Compile>
     <Compile Include="XmlViewer.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -146,6 +155,10 @@
     <ProjectReference Include="..\Gibbed.Illusion.FileFormats\Gibbed.Illusion.FileFormats.csproj">
       <Project>{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}</Project>
       <Name>Gibbed.Illusion.FileFormats</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Gibbed.Squish\Gibbed.Squish.csproj">
+      <Project>{242D0738-AA4C-4C9C-A218-891A8F55559C}</Project>
+      <Name>Gibbed.Squish</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

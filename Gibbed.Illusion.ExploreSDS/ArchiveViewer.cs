@@ -196,6 +196,15 @@ namespace Gibbed.Illusion.ExploreSDS
                 viewer.LoadFile(entry);
                 viewer.Show();
             }
+            else if (type.Name == "Texture")
+            {
+                var viewer = new TextureViewer()
+                {
+                    MdiParent = this.MdiParent,
+                };
+                viewer.LoadFile(entry);
+                viewer.Show();
+            }
             else
             {
                 var viewer = new RawViewer()
