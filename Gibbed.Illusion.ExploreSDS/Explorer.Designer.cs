@@ -52,6 +52,7 @@
             // 
             this.openArchiveDialog.DefaultExt = "sds";
             this.openArchiveDialog.Filter = "Illusion SDS archives (*.sds)|*.sds|All Files (*.*)|*.*";
+            this.openArchiveDialog.Multiselect = true;
             // 
             // mainToolStrip
             // 
@@ -101,19 +102,19 @@
             this.openMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
             this.openMenuItem.Name = "openMenuItem";
             this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openMenuItem.Text = "&Open";
             this.openMenuItem.Click += new System.EventHandler(this.OnOpen);
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(143, 6);
             // 
             // exitMenuItem
             // 
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitMenuItem.Text = "E&xit";
             this.exitMenuItem.Click += new System.EventHandler(this.OnExit);
             // 
@@ -133,40 +134,40 @@
             // closeAllMenuItem
             // 
             this.closeAllMenuItem.Name = "closeAllMenuItem";
-            this.closeAllMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.closeAllMenuItem.Size = new System.Drawing.Size(151, 22);
             this.closeAllMenuItem.Text = "C&lose All";
             this.closeAllMenuItem.Click += new System.EventHandler(this.OnWindowCloseAll);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(148, 6);
             // 
             // cascadeMenuItem
             // 
             this.cascadeMenuItem.Name = "cascadeMenuItem";
-            this.cascadeMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.cascadeMenuItem.Size = new System.Drawing.Size(151, 22);
             this.cascadeMenuItem.Text = "&Cascade";
             this.cascadeMenuItem.Click += new System.EventHandler(this.OnWindowCascade);
             // 
             // tileVerticalMenuItem
             // 
             this.tileVerticalMenuItem.Name = "tileVerticalMenuItem";
-            this.tileVerticalMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tileVerticalMenuItem.Size = new System.Drawing.Size(151, 22);
             this.tileVerticalMenuItem.Text = "Tile &Vertical";
             this.tileVerticalMenuItem.Click += new System.EventHandler(this.OnWindowTileVertical);
             // 
             // tileHorizontalMenuItem
             // 
             this.tileHorizontalMenuItem.Name = "tileHorizontalMenuItem";
-            this.tileHorizontalMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.tileHorizontalMenuItem.Size = new System.Drawing.Size(151, 22);
             this.tileHorizontalMenuItem.Text = "Tile &Horizontal";
             this.tileHorizontalMenuItem.Click += new System.EventHandler(this.OnWindowTileHorizontal);
             // 
             // arrangeIconsMenuItem
             // 
             this.arrangeIconsMenuItem.Name = "arrangeIconsMenuItem";
-            this.arrangeIconsMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.arrangeIconsMenuItem.Size = new System.Drawing.Size(151, 22);
             this.arrangeIconsMenuItem.Text = "&Arrange Icons";
             this.arrangeIconsMenuItem.Click += new System.EventHandler(this.OnWindowArrangeIcons);
             // 

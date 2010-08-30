@@ -1,6 +1,6 @@
 ﻿namespace Gibbed.Illusion.ExploreSDS
 {
-    partial class MemFileViewer
+    partial class RawViewer
     {
         /// <summary>
         /// Required designer variable.
@@ -28,14 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MemFileViewer));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(RawViewer));
             this.hexBox = new Be.Windows.Forms.HexBox();
-            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.saveButton = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.loadFromFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveToFileButton = new System.Windows.Forms.ToolStripButton();
+            this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip.SuspendLayout();
             this.SuspendLayout();
@@ -52,40 +50,20 @@
             this.hexBox.ShadowSelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(60)))), ((int)(((byte)(188)))), ((int)(((byte)(255)))));
             this.hexBox.Size = new System.Drawing.Size(640, 215);
             this.hexBox.StringViewVisible = true;
-            this.hexBox.TabIndex = 0;
+            this.hexBox.TabIndex = 2;
             this.hexBox.UseFixedBytesPerLine = true;
             this.hexBox.VScrollBarVisible = true;
-            // 
-            // saveFileDialog
-            // 
-            this.saveFileDialog.Filter = "All Files (*.*)|*.*";
             // 
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveButton,
-            this.toolStripSeparator1,
             this.loadFromFileButton,
             this.saveToFileButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(640, 25);
-            this.toolStrip.TabIndex = 4;
+            this.toolStrip.TabIndex = 3;
             this.toolStrip.Text = "toolStrip1";
-            // 
-            // saveButton
-            // 
-            this.saveButton.Image = ((System.Drawing.Image)(resources.GetObject("saveButton.Image")));
-            this.saveButton.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(51, 22);
-            this.saveButton.Text = "Save";
-            this.saveButton.Click += new System.EventHandler(this.OnSave);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // loadFromFileButton
             // 
@@ -105,19 +83,23 @@
             this.saveToFileButton.Text = "Save To File";
             this.saveToFileButton.Click += new System.EventHandler(this.OnSaveToFile);
             // 
+            // saveFileDialog
+            // 
+            this.saveFileDialog.Filter = "All Files (*.*)|*.*";
+            // 
             // openFileDialog
             // 
             this.openFileDialog.Filter = "All Files (*.*)|*.*";
             // 
-            // MemFileViewer
+            // RawViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(640, 240);
             this.Controls.Add(this.hexBox);
             this.Controls.Add(this.toolStrip);
-            this.Name = "MemFileViewer";
-            this.Text = "MemFile";
+            this.Name = "RawViewer";
+            this.Text = "Raw";
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
@@ -128,13 +110,10 @@
         #endregion
 
         private Be.Windows.Forms.HexBox hexBox;
-        private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton loadFromFileButton;
         private System.Windows.Forms.ToolStripButton saveToFileButton;
-        private System.Windows.Forms.ToolStripButton saveButton;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-
     }
 }

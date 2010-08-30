@@ -6,36 +6,49 @@ namespace Gibbed.Illusion.ExploreSDS
 {
     public partial class MemFileViewer : Form
     {
-        public FileFormats.ResourceTypes.MemFileResource MemFileResource;
+        public FileFormats.SdsMemory.Entry Entry;
+        public FileFormats.ResourceTypes.MemFileResource Resource;
 
         public MemFileViewer()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
-        public void LoadFile(FileFormats.DataStorage.FileHeader header, FileFormats.SdsMemory.Entry entry)
+        public void LoadFile(FileFormats.SdsMemory.Entry entry)
         {
-            var memFile = new FileFormats.ResourceTypes.MemFileResource();
-            memFile.Deserialize(header, entry.Data);
+            var resource = new FileFormats.ResourceTypes.MemFileResource();
+            resource.Deserialize(entry.Header, entry.Data);
 
-            this.Text += ": " + memFile.Name;
-            this.hexBox.ByteProvider = new DynamicByteProvider(memFile.Data);
+            this.Text += ": " + resource.Name;
+            this.hexBox.ByteProvider = new DynamicByteProvider(resource.Data);
             this.hexBox.ReadOnly = true;
 
-            this.MemFileResource = memFile;
+            this.Entry = entry;
+            this.Resource = resource;
         }
 
         private void OnSave(object sender, System.EventArgs e)
         {
-            var name = this.MemFileResource.Name;
-            if (name.StartsWith("/") == true)
-            {
-                name = name.Substring(1);
-            }
-            name = name.Replace("/", "\\");
-            //name = Path.ChangeExtension(name, ".xml");
+            var data = new MemoryStream();
+            this.Resource.Serialize(this.Entry.Header, data);
+            this.Entry.Data = data;
+        }
 
-            this.saveFileDialog.FileName = name;
+        private void OnSaveToFile(object sender, System.EventArgs e)
+        {
+            if (string.IsNullOrEmpty(this.saveFileDialog.FileName) == true)
+            {
+                var name = this.Resource.Name;
+                if (name.StartsWith("/") == true)
+                {
+                    name = name.Substring(1);
+                }
+                name = name.Replace("/", "\\");
+                //name = Path.ChangeExtension(name, ".xml");
+
+                this.saveFileDialog.FileName = name;
+            }
+
             if (this.saveFileDialog.ShowDialog() != DialogResult.OK)
             {
                 return;
@@ -43,7 +56,26 @@ namespace Gibbed.Illusion.ExploreSDS
 
             using (var output = File.Open(this.saveFileDialog.FileName, FileMode.Create, FileAccess.Write, FileShare.ReadWrite))
             {
-                output.Write(this.MemFileResource.Data, 0, this.MemFileResource.Data.Length);
+                output.Write(this.Resource.Data, 0, this.Resource.Data.Length);
+            }
+        }
+
+        private void OnLoadFromFile(object sender, System.EventArgs e)
+        {
+            if (this.openFileDialog.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            using (var input = File.Open(
+                this.openFileDialog.FileName,
+                FileMode.Open,
+                FileAccess.Read,
+                FileShare.ReadWrite))
+            {
+                this.Resource.Data = new byte[input.Length];
+                input.Read(this.Resource.Data, 0, this.Resource.Data.Length);
+                this.hexBox.ByteProvider = new DynamicByteProvider(this.Resource.Data);
             }
         }
     }

@@ -87,6 +87,9 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="RawViewer.resx">
+      <DependentUpon>RawViewer.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ScriptViewer.resx">
       <DependentUpon>ScriptViewer.cs</DependentUpon>
     </EmbeddedResource>
@@ -109,6 +112,12 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RawViewer.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RawViewer.Designer.cs">
+      <DependentUpon>RawViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="ScriptViewer.cs">
       <SubType>Form</SubType>

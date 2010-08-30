@@ -17,12 +17,14 @@ namespace Gibbed.Illusion.ExploreSDS
                 return;
             }
 
-            var path = this.openArchiveDialog.FileName;
-            var archive = new ArchiveViewer() { MdiParent = this };
-            archive.LoadArchive(path);
-            archive.Show();
+            foreach (var path in this.openArchiveDialog.FileNames)
+            {
+                var archive = new ArchiveViewer() { MdiParent = this };
+                archive.LoadArchive(path);
+                archive.Show();
+            }
         }
-
+        
         private void OnWindowCascade(object sender, EventArgs e)
         {
             this.LayoutMdi(MdiLayout.Cascade);

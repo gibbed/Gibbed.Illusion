@@ -116,74 +116,6 @@ namespace Gibbed.Illusion.ExploreSDS
             this.entryTreeView.EndUpdate();
         }
 
-        private void OnSaveResourceToFile(object sender, EventArgs e)
-        {
-            if (this.entryTreeView.SelectedNode == null)
-            {
-                return;
-            }
-
-            var entry = this.entryTreeView.SelectedNode.Tag as
-                FileFormats.SdsMemory.Entry;
-            if (entry == null)
-            {
-                return;
-            }
-
-            var type = this.Archive.ResourceTypes.SingleOrDefault(
-                r => r.Id == entry.TypeId);
-            if (type == null)
-            {
-                throw new KeyNotFoundException();
-            }
-
-            var name = entry.Description;
-            if (name.StartsWith("/") == true)
-            {
-                name = name.Substring(1);
-            }
-            name = name.Replace("/", "\\");
-
-            this.saveResourceDialog.FileName = Path.ChangeExtension(Path.GetFileName(name), "." + type.Name);
-            if (this.saveResourceDialog.ShowDialog() != DialogResult.OK)
-            {
-                return;
-            }
-
-            using (var output = File.Open(
-                this.saveResourceDialog.FileName,
-                FileMode.Create,
-                FileAccess.Write,
-                FileShare.ReadWrite))
-            {
-                output.WriteFromStream(entry.Data, entry.Data.Length);
-            }
-        }
-
-        private void OnLoadResourceFromFile(object sender, EventArgs e)
-        {
-            if (this.entryTreeView.SelectedNode == null)
-            {
-                return;
-            }
-
-            var entry = this.entryTreeView.SelectedNode.Tag as
-                FileFormats.SdsMemory.Entry;
-            if (entry == null)
-            {
-                return;
-            }
-
-            using (var input = File.Open(
-                this.saveResourceDialog.FileName,
-                FileMode.Open,
-                FileAccess.Read,
-                FileShare.ReadWrite))
-            {
-                entry.Data = input.ReadToMemoryStream(input.Length);
-            }
-        }
-
         private void OnSelectEntry(object sender, TreeViewEventArgs e)
         {
             if (this.entryTreeView.SelectedNode == null)
@@ -243,7 +175,7 @@ namespace Gibbed.Illusion.ExploreSDS
                 {
                     MdiParent = this.MdiParent,
                 };
-                viewer.LoadFile(entry.Header, entry);
+                viewer.LoadFile(entry);
                 viewer.Show();
             }
             else if (type.Name == "Table")
@@ -252,7 +184,7 @@ namespace Gibbed.Illusion.ExploreSDS
                 {
                     MdiParent = this.MdiParent,
                 };
-                viewer.LoadFile(entry.Header, entry);
+                viewer.LoadFile(entry);
                 viewer.Show();
             }
             else if (type.Name == "Script")
@@ -261,7 +193,16 @@ namespace Gibbed.Illusion.ExploreSDS
                 {
                     MdiParent = this.MdiParent,
                 };
-                viewer.LoadFile(entry.Header, entry);
+                viewer.LoadFile(entry);
+                viewer.Show();
+            }
+            else
+            {
+                var viewer = new RawViewer()
+                {
+                    MdiParent = this.MdiParent,
+                };
+                viewer.LoadFile(entry);
                 viewer.Show();
             }
         }

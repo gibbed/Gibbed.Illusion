@@ -16,10 +16,10 @@ namespace Gibbed.Illusion.ExploreSDS
             this.hexBox.ReadOnly = true;
         }
 
-        public void LoadFile(FileFormats.DataStorage.FileHeader header, FileFormats.SdsMemory.Entry entry)
+        public void LoadFile(FileFormats.SdsMemory.Entry entry)
         {
             var resource = new FileFormats.ResourceTypes.ScriptResource();
-            resource.Deserialize(header, entry.Data);
+            resource.Deserialize(entry.Header, entry.Data);
 
             this.Text += ": " + resource.Path;
 

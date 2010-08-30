@@ -10,9 +10,12 @@ namespace Gibbed.Illusion.FileFormats.ResourceTypes
         public uint Unk1;
         public byte[] Data;
 
-        public void Serialize(DataStorage.FileHeader header, Stream input)
+        public void Serialize(DataStorage.FileHeader header, Stream output)
         {
-            throw new NotImplementedException();
+            output.WriteStringU32(this.Name);
+            output.WriteValueU32(this.Unk1);
+            output.WriteValueS32(this.Data.Length);
+            output.Write(this.Data, 0, this.Data.Length);
         }
 
         public void Deserialize(DataStorage.FileHeader header, Stream input)
