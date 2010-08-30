@@ -19,9 +19,17 @@ namespace Gibbed.Illusion.ExploreSDS
         public void LoadFile(FileFormats.SdsMemory.Entry entry)
         {
             this.Text += ": " + entry.Description;
-            this.hexBox.ByteProvider = new DynamicFileByteProvider(entry.Data);
-
             this.Entry = entry;
+
+            this.UpdatePreview();
+        }
+
+        private void UpdatePreview()
+        {
+            this.Entry.Data.Position = 0;
+            byte[] data = new byte[this.Entry.Data.Length];
+            this.Entry.Data.Read(data, 0, data.Length);
+            this.hexBox.ByteProvider = new DynamicByteProvider(data);
         }
 
         private void OnSaveToFile(object sender, EventArgs e)
@@ -69,8 +77,8 @@ namespace Gibbed.Illusion.ExploreSDS
             {
                 this.Entry.Data = new MemoryStream();
                 this.Entry.Data.WriteFromStream(input, input.Length);
+                this.UpdatePreview();
                 this.Entry.Data.Position = 0;
-                this.hexBox.ByteProvider = new DynamicFileByteProvider(this.Entry.Data);
             }
         }
     }
