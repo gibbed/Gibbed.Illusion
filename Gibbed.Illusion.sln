@@ -1,6 +1,6 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.FileFormats", "Gibbed.Illusion.FileFormats\Gibbed.Illusion.FileFormats.csproj", "{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.Test", "Gibbed.Illusion.Test\Gibbed.Illusion.Test.csproj", "{A0A1E860-2E9D-4921-B186-27DDC575416F}"
@@ -16,6 +16,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Illusion.DecompressSDS", "Gibbed.Illusion.DecompressSDS\Gibbed.Illusion.DecompressSDS.csproj", "{C83939E7-713A-4A67-B0E9-B003262EE8DA}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gibbed.Squish", "Gibbed.Squish\Gibbed.Squish.csproj", "{242D0738-AA4C-4C9C-A218-891A8F55559C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{BE2670D1-698C-4D98-95DC-8CD01C242A4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{901463B8-E4EC-48E9-82A7-CB39169B844E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,5 +62,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26} = {BE2670D1-698C-4D98-95DC-8CD01C242A4C}
+		{C98A6CD6-9422-4B35-8B7A-F520D75534D1} = {BE2670D1-698C-4D98-95DC-8CD01C242A4C}
+		{242D0738-AA4C-4C9C-A218-891A8F55559C} = {BE2670D1-698C-4D98-95DC-8CD01C242A4C}
+		{C83939E7-713A-4A67-B0E9-B003262EE8DA} = {901463B8-E4EC-48E9-82A7-CB39169B844E}
+		{ED5B538C-383D-48EB-94E3-1180D78BB716} = {901463B8-E4EC-48E9-82A7-CB39169B844E}
 	EndGlobalSection
 EndGlobal
