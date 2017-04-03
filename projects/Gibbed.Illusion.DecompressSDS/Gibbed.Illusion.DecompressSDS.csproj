@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{ED5B538C-383D-48EB-94E3-1180D78BB716}</ProjectGuid>
+    <ProjectGuid>{C83939E7-713A-4A67-B0E9-B003262EE8DA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Gibbed.Illusion.DecryptSDS</RootNamespace>
-    <AssemblyName>Gibbed.Illusion.DecryptSDS</AssemblyName>
+    <RootNamespace>Gibbed.Illusion.DecompressSDS</RootNamespace>
+    <AssemblyName>Gibbed.Illusion.DecompressSDS</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -74,10 +74,6 @@
     <ProjectReference Include="..\Gibbed.Helpers\Gibbed.Helpers.csproj">
       <Project>{5162A9FB-4DE1-4BBF-B7A2-5E8116AB0D26}</Project>
       <Name>Gibbed.Helpers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Gibbed.Illusion.FileFormats\Gibbed.Illusion.FileFormats.csproj">
-      <Project>{5A432EEC-FE92-4AD8-9DE0-FABBA0B552B4}</Project>
-      <Name>Gibbed.Illusion.FileFormats</Name>
     </ProjectReference>
     <ProjectReference Include="..\NDesk.Options\NDesk.Options.csproj">
       <Project>{C98A6CD6-9422-4B35-8B7A-F520D75534D1}</Project>
