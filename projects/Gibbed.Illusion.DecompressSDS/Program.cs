@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Gibbed.Helpers;
+using Gibbed.IO;
 using Gibbed.Illusion.FileFormats;
 using NDesk.Options;
 
@@ -79,7 +79,7 @@ namespace Gibbed.Illusion.DecompressSDS
                     output.WriteValueS32(archive.ResourceTypes.Count);
                     foreach (var resourceType in archive.ResourceTypes)
                     {
-                        resourceType.Serialize(output, true);
+                        resourceType.Serialize(output, Endian.Little);
                     }
                 }
 
@@ -102,8 +102,8 @@ namespace Gibbed.Illusion.DecompressSDS
                 output.Seek(16, SeekOrigin.Begin);
 
                 var headerData = new MemoryStream();
-                header.Serialize(headerData, true);
-                output.WriteFromMemoryStreamSafe(headerData, true);
+                header.Serialize(headerData, Endian.Little);
+                output.WriteFromMemoryStreamSafe(headerData, Endian.Little);
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
@@ -14,16 +14,16 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
         public uint Unknown18;
         public uint Unknown1C;
 
-        public void Deserialize(Stream input, bool littleEndian)
+        public void Deserialize(Stream input, Endian endian)
         {
-            this.UncompressedSize = input.ReadValueU32(littleEndian);
-            this.Unknown04 = input.ReadValueU32(littleEndian);
-            this.Unknown08 = input.ReadValueU32(littleEndian);
-            this.Unknown0C = input.ReadValueU32(littleEndian);
-            this.CompressedSize = input.ReadValueU32(littleEndian);
-            this.Unknown14 = input.ReadValueU32(littleEndian);
-            this.Unknown18 = input.ReadValueU32(littleEndian);
-            this.Unknown1C = input.ReadValueU32(littleEndian);
+            this.UncompressedSize = input.ReadValueU32(endian);
+            this.Unknown04 = input.ReadValueU32(endian);
+            this.Unknown08 = input.ReadValueU32(endian);
+            this.Unknown0C = input.ReadValueU32(endian);
+            this.CompressedSize = input.ReadValueU32(endian);
+            this.Unknown14 = input.ReadValueU32(endian);
+            this.Unknown18 = input.ReadValueU32(endian);
+            this.Unknown1C = input.ReadValueU32(endian);
         }
     }
 }

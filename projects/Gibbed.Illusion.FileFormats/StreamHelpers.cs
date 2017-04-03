@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Illusion.FileFormats
 {
@@ -9,10 +9,10 @@ namespace Gibbed.Illusion.FileFormats
     {
         static StreamHelpers()
         {
-            Gibbed.Helpers.StreamHelpers.DefaultEncoding = Encoding.GetEncoding(1252);
+            Gibbed.IO.StreamHelpers.DefaultEncoding = Encoding.GetEncoding(1252);
         }
 
-        public static MemoryStream ReadToMemoryStreamSafe(this Stream stream, long size, bool littleEndian)
+        public static MemoryStream ReadToMemoryStreamSafe(this Stream stream, long size, Endian endian)
         {
             MemoryStream memory = new MemoryStream();
 
@@ -29,7 +29,7 @@ namespace Gibbed.Illusion.FileFormats
                 left -= block;
             }
 
-            var theirHash = stream.ReadValueU32(littleEndian);
+            var theirHash = stream.ReadValueU32(endian);
             if (theirHash != myHash)
             {
                 throw new InvalidDataException(string.Format("hash failure ({0:X} vs {1:X})",
@@ -40,7 +40,7 @@ namespace Gibbed.Illusion.FileFormats
             return memory;
         }
 
-        public static void WriteFromMemoryStreamSafe(this Stream stream, MemoryStream data, bool littleEndian)
+        public static void WriteFromMemoryStreamSafe(this Stream stream, MemoryStream data, Endian endian)
         {
             var position = data.Position;
             data.Position = 0;
@@ -58,18 +58,18 @@ namespace Gibbed.Illusion.FileFormats
                 left -= block;
             }
 
-            stream.WriteValueU32(myHash, littleEndian);
+            stream.WriteValueU32(myHash, endian);
             data.Position = position;
         }
 
         public static string ReadStringU16(this Stream stream)
         {
-            return stream.ReadStringU16(true);
+            return stream.ReadStringU16(Endian.Little);
         }
 
-        public static string ReadStringU16(this Stream stream, bool littleEndian)
+        public static string ReadStringU16(this Stream stream, Endian endian)
         {
-            var length = stream.ReadValueU16(littleEndian);
+            var length = stream.ReadValueU16(endian);
             if (length > 0x3FF)
             {
                 throw new InvalidOperationException();
@@ -79,24 +79,24 @@ namespace Gibbed.Illusion.FileFormats
 
         public static void WriteStringU16(this Stream stream, string value)
         {
-            stream.WriteStringU16(value, true);
+            stream.WriteStringU16(value, Endian.Little);
         }
 
-        public static void WriteStringU16(this Stream stream, string value, bool littleEndian)
+        public static void WriteStringU16(this Stream stream, string value, Endian endian)
         {
             ushort length = (ushort)value.Length;
-            stream.WriteValueU16(length, littleEndian);
+            stream.WriteValueU16(length, endian);
             stream.WriteString(length == value.Length ? value : value.Substring(0, length));
         }
 
         public static string ReadStringU32(this Stream stream)
         {
-            return stream.ReadStringU32(true);
+            return stream.ReadStringU32(Endian.Little);
         }
 
-        public static string ReadStringU32(this Stream stream, bool littleEndian)
+        public static string ReadStringU32(this Stream stream, Endian endian)
         {
-            var length = stream.ReadValueU32(littleEndian);
+            var length = stream.ReadValueU32(endian);
             if (length > 0x3FF)
             {
                 throw new InvalidOperationException();
@@ -106,12 +106,12 @@ namespace Gibbed.Illusion.FileFormats
 
         public static void WriteStringU32(this Stream stream, string value)
         {
-            stream.WriteStringU32(value, true);
+            stream.WriteStringU32(value, Endian.Little);
         }
 
-        public static void WriteStringU32(this Stream stream, string value, bool littleEndian)
+        public static void WriteStringU32(this Stream stream, string value, Endian endian)
         {
-            stream.WriteValueS32(value.Length, littleEndian);
+            stream.WriteValueS32(value.Length, endian);
             stream.WriteString(value);
         }
     }

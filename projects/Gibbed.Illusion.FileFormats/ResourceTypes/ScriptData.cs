@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Illusion.FileFormats.ResourceTypes
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Xml.XPath;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Illusion.FileFormats
 {
@@ -136,23 +136,23 @@ namespace Gibbed.Illusion.FileFormats
                 }
             }
 
-            bool littleEndian;
+            Endian endian;
             {
                 data.Seek(8, SeekOrigin.Begin);
                 var platform = data.ReadString(4, true, Encoding.ASCII);
 
-                littleEndian =
-                    platform != "XBOX" &&
-                    platform != "PS3";
+                endian = platform != "XBOX" && platform != "PS3"
+                             ? Endian.Little
+                             : Endian.Big;
             }
 
             // header
             data.Seek(0, SeekOrigin.Begin);
             {
                 var memory = data.ReadToMemoryStreamSafe(
-                    12, littleEndian);
+                    12, endian);
                 var magic = memory.ReadString(4, true, Encoding.ASCII);
-                var version = memory.ReadValueU32(littleEndian);
+                var version = memory.ReadValueU32(endian);
                 var platform = memory.ReadString(4, true, Encoding.ASCII);
 
                 if (magic != "SDS")
@@ -170,18 +170,18 @@ namespace Gibbed.Illusion.FileFormats
 
             var archiveHeader = new DataStorage.ArchiveHeader();
             archiveHeader.Deserialize(
-                data.ReadToMemoryStreamSafe(52, littleEndian),
-                littleEndian);
+                data.ReadToMemoryStreamSafe(52, endian),
+                endian);
 
             // data types
             data.Seek(archiveHeader.ResourceTypeTableOffset, SeekOrigin.Begin);
             {
-                uint count = data.ReadValueU32(littleEndian);
+                uint count = data.ReadValueU32(endian);
                 this.ResourceTypes.Clear();
                 for (uint i = 0; i < count; i++)
                 {
                     var type = new DataStorage.ResourceTypeReference();
-                    type.Deserialize(data, littleEndian);
+                    type.Deserialize(data, endian);
                     this.ResourceTypes.Add(type);
                 }
             }
@@ -211,8 +211,8 @@ namespace Gibbed.Illusion.FileFormats
             var blockStream = new BlockStream(data);
             data.Seek(archiveHeader.BlockTableOffset, SeekOrigin.Begin);
             {
-                uint magic = data.ReadValueU32(littleEndian);
-                uint alignment = data.ReadValueU32(littleEndian);
+                uint magic = data.ReadValueU32(endian);
+                uint alignment = data.ReadValueU32(endian);
                 byte flags = data.ReadValueU8();
                 // if flags != 4 : see note 1
 
@@ -224,7 +224,7 @@ namespace Gibbed.Illusion.FileFormats
                 long virtualOffset = 0;
                 while (true)
                 {
-                    uint size = data.ReadValueU32(littleEndian);
+                    uint size = data.ReadValueU32(endian);
                     bool compressed = data.ReadValueU8() != 0;
 
                     if (size == 0)
@@ -235,7 +235,7 @@ namespace Gibbed.Illusion.FileFormats
                     if (compressed == true)
                     {
                         var compressionInfo = new DataStorage.CompressedBlockHeader();
-                        compressionInfo.Deserialize(data, littleEndian);
+                        compressionInfo.Deserialize(data, endian);
 
                         if (compressionInfo.Unknown04 != 32 ||
                             compressionInfo.Unknown08 != 81920 ||
@@ -278,10 +278,10 @@ namespace Gibbed.Illusion.FileFormats
                 for (uint i = 0; i < archiveHeader.FileCount; i++)
                 {
                     var position = blockStream.Position;
-                    var memory = blockStream.ReadToMemoryStreamSafe(26, littleEndian);
+                    var memory = blockStream.ReadToMemoryStreamSafe(26, endian);
 
                     var fileHeader = new DataStorage.FileHeader();
-                    fileHeader.Deserialize(memory, littleEndian);
+                    fileHeader.Deserialize(memory, endian);
 
                     string description = descriptions == null ? null : descriptions[(int)i];
                     if (string.IsNullOrEmpty(description) == true ||

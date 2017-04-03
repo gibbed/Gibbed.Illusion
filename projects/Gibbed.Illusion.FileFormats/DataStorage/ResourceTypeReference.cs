@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
@@ -10,18 +10,18 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
         public string Name { get; private set; }
         public uint Parent { get; private set; }
 
-        public void Serialize(Stream output, bool littleEndian)
+        public void Serialize(Stream output, Endian endian)
         {
-            output.WriteValueU32(this.Id, littleEndian);
-            output.WriteStringU32(this.Name, littleEndian);
-            output.WriteValueU32(this.Parent, littleEndian);
+            output.WriteValueU32(this.Id, endian);
+            output.WriteStringU32(this.Name, endian);
+            output.WriteValueU32(this.Parent, endian);
         }
 
-        public void Deserialize(Stream input, bool littleEndian)
+        public void Deserialize(Stream input, Endian endian)
         {
-            this.Id = input.ReadValueU32(littleEndian);
-            this.Name = input.ReadStringU32(littleEndian);
-            this.Parent = input.ReadValueU32(littleEndian);
+            this.Id = input.ReadValueU32(endian);
+            this.Name = input.ReadStringU32(endian);
+            this.Parent = input.ReadValueU32(endian);
         }
 
         public object Clone()

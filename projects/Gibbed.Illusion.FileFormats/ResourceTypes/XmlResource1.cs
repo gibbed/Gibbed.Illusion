@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 using System.Xml;
 
 namespace Gibbed.Illusion.FileFormats.ResourceTypes

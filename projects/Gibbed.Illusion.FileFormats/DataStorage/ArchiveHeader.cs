@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Illusion.FileFormats.DataStorage
 {
@@ -17,33 +17,33 @@ namespace Gibbed.Illusion.FileFormats.DataStorage
         public byte[] Unknown20;
         public uint FileCount;
 
-        public void Serialize(Stream output, bool littleEndian)
+        public void Serialize(Stream output, Endian endian)
         {
-            output.WriteValueU32(this.ResourceTypeTableOffset, littleEndian);
-            output.WriteValueU32(this.BlockTableOffset, littleEndian);
-            output.WriteValueU32(this.XmlOffset, littleEndian);
-            output.WriteValueU32(this.SlotRamRequired, littleEndian);
-            output.WriteValueU32(this.SlotVramRequired, littleEndian);
-            output.WriteValueU32(this.OtherRamRequired, littleEndian);
-            output.WriteValueU32(this.OtherVramRequired, littleEndian);
-            output.WriteValueU32(this.Unknown1C, littleEndian);
+            output.WriteValueU32(this.ResourceTypeTableOffset, endian);
+            output.WriteValueU32(this.BlockTableOffset, endian);
+            output.WriteValueU32(this.XmlOffset, endian);
+            output.WriteValueU32(this.SlotRamRequired, endian);
+            output.WriteValueU32(this.SlotVramRequired, endian);
+            output.WriteValueU32(this.OtherRamRequired, endian);
+            output.WriteValueU32(this.OtherVramRequired, endian);
+            output.WriteValueU32(this.Unknown1C, endian);
             output.Write(this.Unknown20, 0, this.Unknown20.Length);
-            output.WriteValueU32(this.FileCount, littleEndian);
+            output.WriteValueU32(this.FileCount, endian);
         }
 
-        public void Deserialize(Stream input, bool littleEndian)
+        public void Deserialize(Stream input, Endian endian)
         {
-            this.ResourceTypeTableOffset = input.ReadValueU32(littleEndian);
-            this.BlockTableOffset = input.ReadValueU32(littleEndian);
-            this.XmlOffset = input.ReadValueU32(littleEndian);
-            this.SlotRamRequired = input.ReadValueU32(littleEndian);
-            this.SlotVramRequired = input.ReadValueU32(littleEndian);
-            this.OtherRamRequired = input.ReadValueU32(littleEndian);
-            this.OtherVramRequired = input.ReadValueU32(littleEndian);
-            this.Unknown1C = input.ReadValueU32(littleEndian);
+            this.ResourceTypeTableOffset = input.ReadValueU32(endian);
+            this.BlockTableOffset = input.ReadValueU32(endian);
+            this.XmlOffset = input.ReadValueU32(endian);
+            this.SlotRamRequired = input.ReadValueU32(endian);
+            this.SlotVramRequired = input.ReadValueU32(endian);
+            this.OtherRamRequired = input.ReadValueU32(endian);
+            this.OtherVramRequired = input.ReadValueU32(endian);
+            this.Unknown1C = input.ReadValueU32(endian);
             this.Unknown20 = new byte[16];
             input.Read(this.Unknown20, 0, this.Unknown20.Length);
-            this.FileCount = input.ReadValueU32(littleEndian);
+            this.FileCount = input.ReadValueU32(endian);
         }
 
         public object Clone()

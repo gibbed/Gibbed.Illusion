@@ -2,7 +2,7 @@
 using System.IO;
 using System.Windows.Forms;
 using Be.Windows.Forms;
-using Gibbed.Helpers;
+using Gibbed.IO;
 
 namespace Gibbed.Illusion.ExploreSDS
 {

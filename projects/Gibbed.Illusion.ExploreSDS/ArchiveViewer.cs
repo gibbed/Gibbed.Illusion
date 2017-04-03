@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Gibbed.Helpers;
+using Gibbed.IO;
 using Gibbed.Illusion.FileFormats;
 
 namespace Gibbed.Illusion.ExploreSDS
@@ -244,8 +244,8 @@ namespace Gibbed.Illusion.ExploreSDS
                 {
                     var entryHeaderData = new MemoryStream();
                     entry.Header.Size = (uint)(30 + entry.Data.Length);
-                    entry.Header.Serialize(entryHeaderData, true);
-                    data.WriteFromMemoryStreamSafe(entryHeaderData, true);
+                    entry.Header.Serialize(entryHeaderData, Endian.Little);
+                    data.WriteFromMemoryStreamSafe(entryHeaderData, Endian.Little);
                     entry.Data.Position = 0;
                     data.WriteFromStream(entry.Data, entry.Data.Length);
                 }
@@ -262,7 +262,7 @@ namespace Gibbed.Illusion.ExploreSDS
                     output.WriteValueS32(this.Archive.ResourceTypes.Count);
                     foreach (var resourceType in this.Archive.ResourceTypes)
                     {
-                        resourceType.Serialize(output, true);
+                        resourceType.Serialize(output, Endian.Little);
                     }
                 }
 
@@ -285,8 +285,8 @@ namespace Gibbed.Illusion.ExploreSDS
                 output.Seek(16, SeekOrigin.Begin);
 
                 var headerData = new MemoryStream();
-                this.Archive.Header.Serialize(headerData, true);
-                output.WriteFromMemoryStreamSafe(headerData, true);
+                this.Archive.Header.Serialize(headerData, Endian.Little);
+                output.WriteFromMemoryStreamSafe(headerData, Endian.Little);
             }
         }
     }

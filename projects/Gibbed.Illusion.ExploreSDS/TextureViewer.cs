@@ -40,8 +40,8 @@ namespace Gibbed.Illusion.ExploreSDS
             memory.Write(this.Resource.Data, 0, this.Resource.Data.Length);
             memory.Position = 0;
 
-            var dds = new Gibbed.Squish.DdsFile();
-            dds.Load(memory);
+            var dds = new Gibbed.Squish.DDSFile();
+            dds.Deserialize(memory);
 
             var image = dds.Image(true, true, true, this.toggleAlphaButton.Checked);
 
