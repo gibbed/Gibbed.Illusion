@@ -1,4 +1,26 @@
-﻿using System;
+﻿/* Copyright (c) 2017 Rick (rick 'at' gibbed 'dot' us)
+ * 
+ * This software is provided 'as-is', without any express or implied
+ * warranty. In no event will the authors be held liable for any damages
+ * arising from the use of this software.
+ * 
+ * Permission is granted to anyone to use this software for any purpose,
+ * including commercial applications, and to alter it and redistribute it
+ * freely, subject to the following restrictions:
+ * 
+ * 1. The origin of this software must not be misrepresented; you must not
+ *    claim that you wrote the original software. If you use this software
+ *    in a product, an acknowledgment in the product documentation would
+ *    be appreciated but is not required.
+ * 
+ * 2. Altered source versions must be plainly marked as such, and must not
+ *    be misrepresented as being the original software.
+ * 
+ * 3. This notice may not be removed or altered from any source
+ *    distribution.
+ */
+
+using System;
 using System.IO;
 using System.Text;
 using Gibbed.IO;
@@ -9,57 +31,51 @@ namespace Gibbed.Illusion.FileFormats
     {
         static StreamHelpers()
         {
-            Gibbed.IO.StreamHelpers.DefaultEncoding = Encoding.GetEncoding(1252);
+            IO.StreamHelpers.DefaultEncoding = Encoding.GetEncoding(1252);
         }
 
         public static MemoryStream ReadToMemoryStreamSafe(this Stream stream, long size, Endian endian)
         {
-            MemoryStream memory = new MemoryStream();
+            var output = new MemoryStream();
 
-            uint myHash = FNV.InitialHash32;
-
-            long left = size;
+            uint computedHash = Hashing.FNV32.Initial;
+            long remaining = size;
             byte[] buffer = new byte[4096];
-            while (left > 0)
+            while (remaining > 0)
             {
-                int block = (int)(Math.Min(left, 4096));
-                stream.Read(buffer, 0, block);
-                myHash = FNV.Hash32(buffer, 0, block);
-                memory.Write(buffer, 0, block);
-                left -= block;
+                int block = (int)(Math.Min(remaining, 4096));
+                var read = stream.Read(buffer, 0, block);
+                if (read != block)
+                {
+                    throw new EndOfStreamException();
+                }
+                computedHash = Hashing.FNV32.Hash(buffer, 0, block);
+                output.Write(buffer, 0, block);
+                remaining -= block;
             }
 
-            var theirHash = stream.ReadValueU32(endian);
-            if (theirHash != myHash)
+            var hash = stream.ReadValueU32(endian);
+            if (hash != computedHash)
             {
                 throw new InvalidDataException(string.Format("hash failure ({0:X} vs {1:X})",
-                    myHash, theirHash));
+                                                             computedHash,
+                                                             hash));
             }
 
-            memory.Position = 0;
-            return memory;
+            output.Position = 0;
+            return output;
         }
 
-        public static void WriteFromMemoryStreamSafe(this Stream stream, MemoryStream data, Endian endian)
+        public static void WriteFromMemoryStreamSafe(this Stream stream, MemoryStream input, Endian endian)
         {
-            var position = data.Position;
-            data.Position = 0;
-
-            uint myHash = FNV.InitialHash32;
-
-            long left = data.Length;
-            byte[] buffer = new byte[4096];
-            while (left > 0)
-            {
-                int block = (int)(Math.Min(left, 4096));
-                data.Read(buffer, 0, block);
-                myHash = FNV.Hash32(buffer, 0, block);
-                stream.Write(buffer, 0, block);
-                left -= block;
-            }
-
-            stream.WriteValueU32(myHash, endian);
-            data.Position = position;
+            var position = input.Position;
+            input.Position = 0;
+            var buffer = input.GetBuffer();
+            var length = (int)input.Length;
+            var computedHash = Hashing.FNV32.Hash(buffer, 0, length);
+            stream.Write(buffer, 0, length);
+            stream.WriteValueU32(computedHash, endian);
+            input.Position = position;
         }
 
         public static string ReadStringU16(this Stream stream)

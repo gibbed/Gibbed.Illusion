@@ -72,28 +72,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlockStream.cs" />
-    <Compile Include="DataStorage\CompressedBlockHeader.cs" />
-    <Compile Include="DataStorage\FileHeader.cs" />
-    <Compile Include="DataStorage\ArchiveHeader.cs" />
-    <Compile Include="DataStorage\ResourceTypeReference.cs" />
-    <Compile Include="FNV.cs" />
-    <Compile Include="IResourceType.cs" />
-    <Compile Include="ResourceTypes\MemFileResource.cs" />
-    <Compile Include="ResourceTypes\ScriptData.cs" />
-    <Compile Include="ResourceTypes\ScriptResource.cs" />
-    <Compile Include="ResourceTypes\TableData.cs" />
-    <Compile Include="ResourceTypes\TableResource.cs" />
-    <Compile Include="ResourceTypes\TextureResource.cs" />
-    <Compile Include="ResourceTypes\XmlResource.cs" />
-    <Compile Include="ResourceTypes\XmlResource0.cs" />
-    <Compile Include="ResourceTypes\XmlResource1.cs" />
+    <Compile Include="BlockReaderStream.cs" />
+    <Compile Include="BlockWriterStream.cs" />
+    <Compile Include="Hashing\FNV32.cs" />
+    <Compile Include="Hashing\FNV64.cs" />
     <Compile Include="SdsConfigFile.cs" />
-    <Compile Include="SdsMemory.cs" />
-    <Compile Include="SdsReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StreamHelpers.cs" />
-    <Compile Include="TEA.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
