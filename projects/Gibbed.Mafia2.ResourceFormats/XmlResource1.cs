@@ -31,24 +31,24 @@ namespace Gibbed.Mafia2.ResourceFormats
 {
     public class XmlResource1
     {
-        public static void Serialize(Stream output, string content)
+        public static void Serialize(Stream output, string content, Endian endian)
         {
             throw new NotImplementedException();
         }
 
-        public static string Deserialize(Stream input)
+        public static string Deserialize(Stream input, Endian endian)
         {
-            if (input.ReadValueU16() != 0x5842) // 'BX'
+            if (input.ReadValueU16(endian) != 0x5842) // 'BX'
             {
                 throw new FormatException();
             }
 
-            if (input.ReadValueU16() > 1)
+            if (input.ReadValueU16(endian) > 1)
             {
                 throw new FormatException();
             }
 
-            var root = (NodeEntry)DeserializeNodeEntry(input);
+            var root = (NodeEntry)DeserializeNodeEntry(input, endian);
 
             var settings = new XmlWriterSettings();
             settings.Indent = true;
@@ -71,9 +71,9 @@ namespace Gibbed.Mafia2.ResourceFormats
             foreach (var attribute in node.Attributes)
             {
                 writer.WriteStartAttribute(attribute.Name);
-                writer.WriteValue(
-                    attribute.Value == null ?
-                    "" : attribute.Value.ToString());
+                writer.WriteValue(attribute.Value == null
+                                      ? ""
+                                      : attribute.Value.ToString());
                 writer.WriteEndAttribute();
             }
 
@@ -90,9 +90,9 @@ namespace Gibbed.Mafia2.ResourceFormats
             writer.WriteEndElement();
         }
 
-        private static object DeserializeNodeEntry(Stream input)
+        private static object DeserializeNodeEntry(Stream input, Endian endian)
         {
-            var unk1 = input.ReadValueU16();
+            var unk1 = input.ReadValueU16(endian);
             var nodeType = input.ReadValueU8();
 
             switch (nodeType)
@@ -100,7 +100,7 @@ namespace Gibbed.Mafia2.ResourceFormats
                 case 1:
                 {
                     var nameLength = input.ReadValueU8();
-                    var childCount = input.ReadValueU16();
+                    var childCount = input.ReadValueU16(endian);
                     var attributeCount = input.ReadValueU8();
 
                     var name = input.ReadString(nameLength + 1, true, Encoding.UTF8);
@@ -113,7 +113,7 @@ namespace Gibbed.Mafia2.ResourceFormats
                     var children = new List<object>();
                     for (ushort i = 0; i < childCount; i++)
                     {
-                        children.Add(DeserializeNodeEntry(input));
+                        children.Add(DeserializeNodeEntry(input, endian));
                     }
 
                     if (children.Count == 1 && children[0] is DataValue)
@@ -130,14 +130,13 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                     for (byte i = 0; i < attributeCount; i++)
                     {
-                        var child = DeserializeNodeEntry(input);
+                        var child = DeserializeNodeEntry(input, endian);
 
                         if (child is NodeEntry)
                         {
                             var data = (NodeEntry)child;
 
-                            if (data.Children.Count != 0 ||
-                                data.Attributes.Count != 0)
+                            if (data.Children.Count != 0 || data.Attributes.Count != 0)
                             {
                                 throw new FormatException();
                             }
@@ -163,7 +162,7 @@ namespace Gibbed.Mafia2.ResourceFormats
                     var valueType = input.ReadValueU8();
                     if (valueType == 0)
                     {
-                        var valueLength = input.ReadValueU16();
+                        var valueLength = input.ReadValueU16(endian);
                         var value = input.ReadString(valueLength + 1, true, Encoding.UTF8);
                         return new DataValue(DataType.String, value);
                     }
@@ -183,7 +182,7 @@ namespace Gibbed.Mafia2.ResourceFormats
                         Name = name,
                     };
 
-                    attribute.Value = (DataValue)DeserializeNodeEntry(input);
+                    attribute.Value = (DataValue)DeserializeNodeEntry(input, endian);
                     return attribute;
                 }
 

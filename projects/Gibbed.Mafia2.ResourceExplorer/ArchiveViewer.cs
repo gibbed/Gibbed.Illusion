@@ -217,7 +217,7 @@ namespace Gibbed.Mafia2.ResourceExplorer
 
             var viewer = ResourceViewerFactory.Create(type.Name);
             viewer.MdiParent = this.MdiParent;
-            viewer.LoadResource(resourceEntry, node.Text);
+            viewer.LoadResource(resourceEntry, node.Text, this._Archive.Endian);
             viewer.Show();
         }
 

@@ -33,20 +33,20 @@ namespace Gibbed.Mafia2.ResourceFormats
         public byte Unknown9;
         public byte[] Data;
 
-        public void Serialize(ushort version, Stream output)
+        public void Serialize(ushort version, Stream output, Endian endian)
         {
-            output.WriteValueU64(this.NameHash);
+            output.WriteValueU64(this.NameHash, endian);
             output.WriteValueU8(this.Unknown8);
             if (version == 2)
             {
                 output.WriteValueU8(this.Unknown9);
             }
-            output.Write(this.Data, 0, this.Data.Length);
+            output.WriteBytes(this.Data);
         }
 
-        public void Deserialize(ushort version, Stream input)
+        public void Deserialize(ushort version, Stream input, Endian endian)
         {
-            this.NameHash = input.ReadValueU64();
+            this.NameHash = input.ReadValueU64(endian);
             this.Unknown8 = input.ReadValueU8();
             this.Unknown9 = version == 2 ? input.ReadValueU8() : (byte)0;
 
@@ -55,8 +55,7 @@ namespace Gibbed.Mafia2.ResourceFormats
                 throw new InvalidOperationException();
             }
 
-            this.Data = new byte[input.Length - input.Position];
-            input.Read(this.Data, 0, this.Data.Length);
+            this.Data = input.ReadBytes((uint)(input.Length - input.Position));
         }
     }
 }

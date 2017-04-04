@@ -27,6 +27,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Gibbed.IO;
 using ColumnType = Gibbed.Mafia2.ResourceFormats.TableData.ColumnType;
 using ResourceEntry = Gibbed.Mafia2.FileFormats.Archive.ResourceEntry;
 
@@ -124,12 +125,12 @@ namespace Gibbed.Mafia2.ResourceExplorer
             return hash.ToString("X8");
         }
 
-        public void LoadResource(ResourceEntry resourceEntry, string description)
+        public void LoadResource(ResourceEntry resourceEntry, string description, Endian endian)
         {
             var tables = new ResourceFormats.TableResource();
             using (var data = new MemoryStream(resourceEntry.Data, false))
             {
-                tables.Deserialize(resourceEntry.Version, data);
+                tables.Deserialize(resourceEntry.Version, data, endian);
             }
 
             this._TableComboBox.Items.Clear();

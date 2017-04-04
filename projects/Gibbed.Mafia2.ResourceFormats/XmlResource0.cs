@@ -33,7 +33,7 @@ namespace Gibbed.Mafia2.ResourceFormats
 {
     public class XmlResource0
     {
-        public static void Serialize(Stream output, string content)
+        public static void Serialize(Stream output, string content, Endian endian)
         {
             var nodes = new List<NodeEntry>();
 
@@ -43,8 +43,7 @@ namespace Gibbed.Mafia2.ResourceFormats
             nav.MoveToRoot();
 
             var children = nav.SelectChildren(XPathNodeType.Element);
-            if (children.Count != 1 ||
-                children.MoveNext() == false)
+            if (children.Count != 1 || children.MoveNext() == false)
             {
                 throw new InvalidOperationException();
             }
@@ -60,29 +59,29 @@ namespace Gibbed.Mafia2.ResourceFormats
             ReadXmlNode(nodes, root, children.Current);
 
             var valueData = new MemoryStream();
-            valueData.WriteValueU32(4);
-            valueData.WriteValueU32(0);
+            valueData.WriteValueU32(4, endian);
+            valueData.WriteValueU32(0, endian);
             valueData.WriteValueU8(0);
 
             var nodeData = new MemoryStream();
 
             foreach (var node in nodes)
             {
-                nodeData.WriteValueU32(SerializeData(valueData, node.Name));
-                nodeData.WriteValueU32(SerializeData(valueData, node.Value));
-                nodeData.WriteValueU32(node.Id);
+                nodeData.WriteValueU32(SerializeData(valueData, node.Name, endian), endian);
+                nodeData.WriteValueU32(SerializeData(valueData, node.Value, endian), endian);
+                nodeData.WriteValueU32(node.Id, endian);
 
-                nodeData.WriteValueS32(node.Children.Count);
+                nodeData.WriteValueS32(node.Children.Count, endian);
                 foreach (var child in node.Children)
                 {
-                    nodeData.WriteValueU32(child);
+                    nodeData.WriteValueU32(child, endian);
                 }
 
-                nodeData.WriteValueS32(node.Attributes.Count);
+                nodeData.WriteValueS32(node.Attributes.Count, endian);
                 foreach (var attribute in node.Attributes)
                 {
-                    nodeData.WriteValueU32(SerializeData(valueData, attribute.Name));
-                    nodeData.WriteValueU32(SerializeData(valueData, attribute.Value));
+                    nodeData.WriteValueU32(SerializeData(valueData, attribute.Name, endian), endian);
+                    nodeData.WriteValueU32(SerializeData(valueData, attribute.Value, endian), endian);
                 }
             }
 
@@ -90,13 +89,13 @@ namespace Gibbed.Mafia2.ResourceFormats
             nodeData.Position = 0;
 
             output.WriteValueU8(4);
-            output.WriteValueS32(nodes.Count);
-            output.WriteValueU32((uint)valueData.Length);
+            output.WriteValueS32(nodes.Count, endian);
+            output.WriteValueU32((uint)valueData.Length, endian);
             output.WriteFromStream(valueData, (uint)valueData.Length);
             output.WriteFromStream(nodeData, nodeData.Length);
         }
 
-        private static uint SerializeData(Stream output, DataValue data)
+        private static uint SerializeData(Stream output, DataValue data, Endian endian)
         {
             uint position = (uint)output.Position;
 
@@ -109,16 +108,16 @@ namespace Gibbed.Mafia2.ResourceFormats
             {
                 case DataType.Special:
                 {
-                    output.WriteValueU32(1);
-                    output.WriteValueU32(0);
+                    output.WriteValueU32(1, endian);
+                    output.WriteValueU32(0, endian);
                     output.WriteStringZ((string)data.Value, Encoding.UTF8);
                     break;
                 }
 
                 case DataType.Boolean:
                 {
-                    output.WriteValueU32(2);
-                    output.WriteValueU32(0);
+                    output.WriteValueU32(2, endian);
+                    output.WriteValueU32(0, endian);
 
                     if (data.Value is bool)
                     {
@@ -134,16 +133,16 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                 case DataType.Float:
                 {
-                    output.WriteValueU32(3);
-                    output.WriteValueU32(0);
+                    output.WriteValueU32(3, endian);
+                    output.WriteValueU32(0, endian);
 
                     if (data.Value is float)
                     {
-                        output.WriteValueF32((float)data.Value);
+                        output.WriteValueF32((float)data.Value, endian);
                     }
                     else
                     {
-                        output.WriteValueF32(float.Parse((string)data.Value));
+                        output.WriteValueF32(float.Parse((string)data.Value), endian);
                     }
 
                     break;
@@ -151,24 +150,24 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                 case DataType.String:
                 {
-                    output.WriteValueU32(4);
-                    output.WriteValueU32(0);
+                    output.WriteValueU32(4, endian);
+                    output.WriteValueU32(0, endian);
                     output.WriteStringZ((string)data.Value, Encoding.UTF8);
                     break;
                 }
 
                 case DataType.Integer:
                 {
-                    output.WriteValueU32(5);
-                    output.WriteValueU32(0);
+                    output.WriteValueU32(5, endian);
+                    output.WriteValueU32(0, endian);
 
                     if (data.Value is int)
                     {
-                        output.WriteValueS32((int)data.Value);
+                        output.WriteValueS32((int)data.Value, endian);
                     }
                     else
                     {
-                        output.WriteValueS32(int.Parse((string)data.Value));
+                        output.WriteValueS32(int.Parse((string)data.Value), endian);
                     }
 
                     break;
@@ -233,20 +232,20 @@ namespace Gibbed.Mafia2.ResourceFormats
             }
         }
 
-        public static string Deserialize(Stream input)
+        public static string Deserialize(Stream input, Endian endian)
         {
             if (input.ReadValueU8() != 4)
             {
                 throw new FormatException();
             }
 
-            var count = input.ReadValueU32();
+            var count = input.ReadValueU32(endian);
             if (count > 0x3FFFFFFF)
             {
                 throw new FormatException();
             }
 
-            var dataSize = input.ReadValueU32();
+            var dataSize = input.ReadValueU32(endian);
             if (dataSize > 0x500000)
             {
                 throw new FormatException();
@@ -258,26 +257,26 @@ namespace Gibbed.Mafia2.ResourceFormats
             {
                 var node = new NodeEntry()
                 {
-                    Name = DeserializeData(data, input.ReadValueU32()),
-                    Value = DeserializeData(data, input.ReadValueU32()),
+                    Name = DeserializeData(data, input.ReadValueU32(endian), endian),
+                    Value = DeserializeData(data, input.ReadValueU32(endian), endian),
                     Id = input.ReadValueU32(),
                 };
 
-                var childCount = input.ReadValueU32();
+                var childCount = input.ReadValueU32(endian);
                 node.Children.Clear();
                 for (uint j = 0; j < childCount; j++)
                 {
-                    node.Children.Add(input.ReadValueU32());
+                    node.Children.Add(input.ReadValueU32(endian));
                 }
 
-                var attributeCount = input.ReadValueU32();
+                var attributeCount = input.ReadValueU32(endian);
                 node.Attributes.Clear();
                 for (uint j = 0; j < attributeCount; j++)
                 {
                     var attribute = new AttributeEntry()
                     {
-                        Name = DeserializeData(data, input.ReadValueU32()),
-                        Value = DeserializeData(data, input.ReadValueU32()),
+                        Name = DeserializeData(data, input.ReadValueU32(endian), endian),
+                        Value = DeserializeData(data, input.ReadValueU32(endian), endian),
                     };
                     if (attribute.Name.Value.ToString() == "__type")
                     {
@@ -304,9 +303,7 @@ namespace Gibbed.Mafia2.ResourceFormats
                     throw new InvalidOperationException();
                 }
 
-                if (root.Children.Count != 1 ||
-                    root.Attributes.Count > 0 ||
-                    root.Value != null)
+                if (root.Children.Count != 1 || root.Attributes.Count > 0 || root.Value != null)
                 {
                     throw new FormatException();
                 }
@@ -328,16 +325,16 @@ namespace Gibbed.Mafia2.ResourceFormats
             return output.ToString();
         }
 
-        private static DataValue DeserializeData(Stream input, uint offset)
+        private static DataValue DeserializeData(Stream input, uint offset, Endian endian)
         {
             input.Seek(offset, SeekOrigin.Begin);
 
-            var type = (DataType)input.ReadValueU32();
+            var type = (DataType)input.ReadValueU32(endian);
             switch (type)
             {
                 case DataType.Special:
                 {
-                    var unk0 = input.ReadValueU32();
+                    var unk0 = input.ReadValueU32(endian);
                     if (unk0 != 0)
                     {
                         throw new FormatException();
@@ -354,7 +351,7 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                 case DataType.Boolean:
                 {
-                    var unk0 = input.ReadValueU32();
+                    var unk0 = input.ReadValueU32(endian);
                     if (unk0 != 0)
                     {
                         throw new FormatException();
@@ -366,19 +363,19 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                 case DataType.Float:
                 {
-                    var unk0 = input.ReadValueU32();
+                    var unk0 = input.ReadValueU32(endian);
                     if (unk0 != 0)
                     {
                         throw new FormatException();
                     }
 
-                    var value = input.ReadValueF32();
+                    var value = input.ReadValueF32(endian);
                     return new DataValue(type, value);
                 }
 
                 case DataType.String:
                 {
-                    var unk0 = input.ReadValueU32();
+                    var unk0 = input.ReadValueU32(endian);
                     if (unk0 != 0)
                     {
                         throw new FormatException();
@@ -395,13 +392,13 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                 case DataType.Integer:
                 {
-                    var unk0 = input.ReadValueU32();
+                    var unk0 = input.ReadValueU32(endian);
                     if (unk0 != 0)
                     {
                         throw new FormatException();
                     }
 
-                    var value = input.ReadValueS32();
+                    var value = input.ReadValueS32(endian);
                     return new DataValue(type, value);
                 }
 
@@ -419,10 +416,9 @@ namespace Gibbed.Mafia2.ResourceFormats
             foreach (var attribute in node.Attributes)
             {
                 writer.WriteStartAttribute(attribute.Name.ToString());
-                writer.WriteValue(
-                    attribute.Value == null
-                        ? ""
-                        : attribute.Value.ToString());
+                writer.WriteValue(attribute.Value == null
+                                      ? ""
+                                      : attribute.Value.ToString());
                 writer.WriteEndAttribute();
             }
 
@@ -496,20 +492,32 @@ namespace Gibbed.Mafia2.ResourceFormats
             switch (type)
             {
                 case DataType.Special:
-                    return "x";
-                case DataType.Boolean:
-                    return "b";
-                case DataType.Float:
-                    return "f";
-                case DataType.String:
-                    return "s";
-                case DataType.Integer:
-                    return "i";
-                default:
                 {
-                    throw new InvalidOperationException();
+                    return "x";
+                }
+
+                case DataType.Boolean:
+                {
+                    return "b";
+                }
+
+                case DataType.Float:
+                {
+                    return "f";
+                }
+
+                case DataType.String:
+                {
+                    return "s";
+                }
+
+                case DataType.Integer:
+                {
+                    return "i";
                 }
             }
+
+            throw new NotSupportedException();
         }
 
         private static DataType DataTypeFromString(string type)
@@ -517,20 +525,32 @@ namespace Gibbed.Mafia2.ResourceFormats
             switch (type)
             {
                 case "x":
-                    return DataType.Special;
-                case "b":
-                    return DataType.Boolean;
-                case "f":
-                    return DataType.Float;
-                case "s":
-                    return DataType.String;
-                case "i":
-                    return DataType.Integer;
-                default:
                 {
-                    throw new InvalidOperationException();
+                    return DataType.Special;
+                }
+
+                case "b":
+                {
+                    return DataType.Boolean;
+                }
+
+                case "f":
+                {
+                    return DataType.Float;
+                }
+
+                case "s":
+                {
+                    return DataType.String;
+                }
+
+                case "i":
+                {
+                    return DataType.Integer;
                 }
             }
+
+            throw new NotSupportedException();
         }
     }
 }

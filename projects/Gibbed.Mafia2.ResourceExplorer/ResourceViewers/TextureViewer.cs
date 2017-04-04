@@ -23,6 +23,7 @@
 using System;
 using System.IO;
 using System.Windows.Forms;
+using Gibbed.IO;
 using DDSFile = Gibbed.Squish.DDSFile;
 using ResourceEntry = Gibbed.Mafia2.FileFormats.Archive.ResourceEntry;
 
@@ -31,6 +32,7 @@ namespace Gibbed.Mafia2.ResourceExplorer
     public partial class TextureViewer : Form, IResourceViewer
     {
         private ResourceEntry _ResourceEntry;
+        private Endian _Endian;
         private string _Description;
         private ResourceFormats.TextureResource _Resource;
 
@@ -39,15 +41,16 @@ namespace Gibbed.Mafia2.ResourceExplorer
             this.InitializeComponent();
         }
 
-        public void LoadResource(ResourceEntry resourceEntry, string description)
+        public void LoadResource(ResourceEntry resourceEntry, string description, Endian endian)
         {
             var resource = new ResourceFormats.TextureResource();
             using (var data = new MemoryStream(resourceEntry.Data, false))
             {
-                resource.Deserialize(resourceEntry.Version, data);
+                resource.Deserialize(resourceEntry.Version, data, endian);
             }
 
             this._ResourceEntry = resourceEntry;
+            this._Endian = endian;
             this._Description = description;
             this._Resource = resource;
 
@@ -61,7 +64,7 @@ namespace Gibbed.Mafia2.ResourceExplorer
         {
             using (var data = new MemoryStream())
             {
-                this._Resource.Serialize(this._ResourceEntry.Version, data);
+                this._Resource.Serialize(this._ResourceEntry.Version, data, this._Endian);
                 data.Flush();
                 this._ResourceEntry.Data = data.ToArray();
             }

@@ -34,25 +34,23 @@ namespace Gibbed.Mafia2.ResourceFormats
         public ulong NameHash;
         public string Name;
 
-        public List<Row> Rows =
-            new List<Row>();
-        public List<Column> Columns =
-            new List<Column>();
+        public List<Row> Rows = new List<Row>();
+        public List<Column> Columns = new List<Column>();
 
         public override string ToString()
         {
             return this.Name;
         }
 
-        public void Serialize(ushort version, Stream input)
+        public void Serialize(ushort version, Stream input, Endian endian)
         {
             throw new NotImplementedException();
         }
 
-        public void Deserialize(ushort version, Stream input)
+        public void Deserialize(ushort version, Stream input, Endian endian)
         {
-            this.NameHash = input.ReadValueU64();
-            this.Name = input.ReadStringU16();
+            this.NameHash = input.ReadValueU64(endian);
+            this.Name = input.ReadStringU16(endian);
 
             if (version >= 2)
             {
@@ -60,25 +58,25 @@ namespace Gibbed.Mafia2.ResourceFormats
             }
             else
             {
-                var columnCount = input.ReadValueU16();
-                
-                var unk1 = input.ReadValueU32();
-                var unk2 = input.ReadValueU32();
-                
-                var rowSize = input.ReadValueU32();
-                var rowCount = input.ReadValueU32();
+                var columnCount = input.ReadValueU16(endian);
+
+                var unk1 = input.ReadValueU32(endian);
+                var unk2 = input.ReadValueU32(endian);
+
+                var rowSize = input.ReadValueU32(endian);
+                var rowCount = input.ReadValueU32(endian);
                 var data = input.ReadToMemoryStream(rowSize * rowCount);
 
                 this.Columns = new List<Column>();
                 for (uint i = 0; i < columnCount; i++)
                 {
                     this.Columns.Add(new Column()
-                        {
-                            NameHash = input.ReadValueU32(),
-                            Type = (ColumnType)input.ReadValueU8(),
-                            Unknown2 = input.ReadValueU8(),
-                            Unknown3 = input.ReadValueU16(),
-                        });
+                    {
+                        NameHash = input.ReadValueU32(endian),
+                        Type = (ColumnType)input.ReadValueU8(),
+                        Unknown2 = input.ReadValueU8(),
+                        Unknown3 = input.ReadValueU16(endian),
+                    });
                 }
 
                 input = null;
@@ -100,7 +98,7 @@ namespace Gibbed.Mafia2.ResourceFormats
                         {
                             case ColumnType.Boolean:
                             {
-                                var value = data.ReadValueU32();
+                                var value = data.ReadValueU32(endian);
                                 if (value != 0 && value != 1)
                                 {
                                     throw new FormatException();
@@ -111,35 +109,35 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                             case ColumnType.Float32:
                             {
-                                var value = data.ReadValueF32();
+                                var value = data.ReadValueF32(endian);
                                 row.Values.Add(value);
                                 break;
                             }
 
                             case ColumnType.Signed32:
                             {
-                                var value = data.ReadValueS32();
+                                var value = data.ReadValueS32(endian);
                                 row.Values.Add(value);
                                 break;
                             }
 
                             case ColumnType.Unsigned32:
                             {
-                                var value = data.ReadValueU32();
+                                var value = data.ReadValueU32(endian);
                                 row.Values.Add(value);
                                 break;
                             }
 
                             case ColumnType.Flags32:
                             {
-                                var value = data.ReadValueU32();
+                                var value = data.ReadValueU32(endian);
                                 row.Values.Add(value);
                                 break;
                             }
 
                             case ColumnType.Hash64:
                             {
-                                var value = data.ReadValueU64();
+                                var value = data.ReadValueU64(endian);
                                 row.Values.Add(value);
                                 break;
                             }
@@ -174,9 +172,9 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                             case ColumnType.Color:
                             {
-                                float r = data.ReadValueF32();
-                                float g = data.ReadValueF32();
-                                float b = data.ReadValueF32();
+                                float r = data.ReadValueF32(endian);
+                                float g = data.ReadValueF32(endian);
+                                float b = data.ReadValueF32(endian);
                                 // TODO: de-stupidize this
                                 row.Values.Add(string.Format("{0}, {1}, {2}", r, g, b));
                                 break;
@@ -184,7 +182,7 @@ namespace Gibbed.Mafia2.ResourceFormats
 
                             case ColumnType.Hash64AndString32:
                             {
-                                var hash = data.ReadValueU64();
+                                var hash = data.ReadValueU64(endian);
                                 string value = data.ReadString(32, true);
                                 row.Values.Add(value);
                                 break;
@@ -212,10 +210,10 @@ namespace Gibbed.Mafia2.ResourceFormats
             public override string ToString()
             {
                 return string.Format("{0:X8} : {1} ({2}, {3})",
-                    this.NameHash,
-                    this.Type,
-                    this.Unknown2,
-                    this.Unknown3);
+                                     this.NameHash,
+                                     this.Type,
+                                     this.Unknown2,
+                                     this.Unknown3);
             }
         }
 
@@ -254,12 +252,36 @@ namespace Gibbed.Mafia2.ResourceFormats
         {
             switch (type)
             {
-                case ColumnType.Boolean: return typeof(bool);
-                case ColumnType.Float32: return typeof(float);
-                case ColumnType.Signed32: return typeof(int);
-                case ColumnType.Unsigned32: return typeof(uint);
-                case ColumnType.Flags32: return typeof(uint);
-                case ColumnType.Hash64: return typeof(ulong);
+                case ColumnType.Boolean:
+                {
+                    return typeof(bool);
+                }
+
+                case ColumnType.Float32:
+                {
+                    return typeof(float);
+                }
+
+                case ColumnType.Signed32:
+                {
+                    return typeof(int);
+                }
+
+                case ColumnType.Unsigned32:
+                {
+                    return typeof(uint);
+                }
+
+                case ColumnType.Flags32:
+                {
+                    return typeof(uint);
+                }
+
+                case ColumnType.Hash64:
+                {
+                    return typeof(ulong);
+                }
+
                 case ColumnType.String8:
                 case ColumnType.String16:
                 case ColumnType.String32:
@@ -267,8 +289,18 @@ namespace Gibbed.Mafia2.ResourceFormats
                 {
                     return typeof(string);
                 }
-                //case ColumnType.Color: return typeof(Color);
-                case ColumnType.Hash64AndString32: return typeof(string);
+
+                /*
+                case ColumnType.Color:
+                {
+                    return typeof(Color);
+                }
+                */
+
+                case ColumnType.Hash64AndString32:
+                {
+                    return typeof(string);
+                }
             }
 
             throw new ArgumentException("unhandled type", "type");

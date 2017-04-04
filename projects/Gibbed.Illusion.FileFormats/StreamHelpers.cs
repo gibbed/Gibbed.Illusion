@@ -78,11 +78,6 @@ namespace Gibbed.Illusion.FileFormats
             input.Position = position;
         }
 
-        public static string ReadStringU16(this Stream stream)
-        {
-            return stream.ReadStringU16(Endian.Little);
-        }
-
         public static string ReadStringU16(this Stream stream, Endian endian)
         {
             var length = stream.ReadValueU16(endian);
@@ -93,21 +88,11 @@ namespace Gibbed.Illusion.FileFormats
             return stream.ReadString(length);
         }
 
-        public static void WriteStringU16(this Stream stream, string value)
-        {
-            stream.WriteStringU16(value, Endian.Little);
-        }
-
         public static void WriteStringU16(this Stream stream, string value, Endian endian)
         {
             ushort length = (ushort)value.Length;
             stream.WriteValueU16(length, endian);
             stream.WriteString(length == value.Length ? value : value.Substring(0, length));
-        }
-
-        public static string ReadStringU32(this Stream stream)
-        {
-            return stream.ReadStringU32(Endian.Little);
         }
 
         public static string ReadStringU32(this Stream stream, Endian endian)
@@ -118,11 +103,6 @@ namespace Gibbed.Illusion.FileFormats
                 throw new InvalidOperationException();
             }
             return stream.ReadString(length);
-        }
-
-        public static void WriteStringU32(this Stream stream, string value)
-        {
-            stream.WriteStringU32(value, Endian.Little);
         }
 
         public static void WriteStringU32(this Stream stream, string value, Endian endian)

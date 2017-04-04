@@ -33,25 +33,24 @@ namespace Gibbed.Mafia2.ResourceFormats
         public uint Unk1;
         public byte[] Data;
 
-        public void Serialize(ushort version, Stream output)
+        public void Serialize(ushort version, Stream output, Endian endian)
         {
-            output.WriteStringU32(this.Name);
-            output.WriteValueU32(this.Unk1);
-            output.WriteValueS32(this.Data.Length);
-            output.Write(this.Data, 0, this.Data.Length);
+            output.WriteStringU32(this.Name, endian);
+            output.WriteValueU32(this.Unk1, endian);
+            output.WriteValueS32(this.Data.Length, endian);
+            output.WriteBytes(this.Data);
         }
 
-        public void Deserialize(ushort version, Stream input)
+        public void Deserialize(ushort version, Stream input, Endian endian)
         {
-            this.Name = input.ReadStringU32();
-            this.Unk1 = input.ReadValueU32();
+            this.Name = input.ReadStringU32(endian);
+            this.Unk1 = input.ReadValueU32(endian);
             if (this.Unk1 != 1)
             {
                 throw new InvalidOperationException();
             }
-            uint size = input.ReadValueU32();
-            this.Data = new byte[size];
-            input.Read(this.Data, 0, this.Data.Length);
+            uint size = input.ReadValueU32(endian);
+            this.Data = input.ReadBytes(size);
         }
     }
 }

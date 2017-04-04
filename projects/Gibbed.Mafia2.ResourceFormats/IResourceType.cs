@@ -21,12 +21,13 @@
  */
 
 using System.IO;
+using Gibbed.IO;
 
 namespace Gibbed.Mafia2.ResourceFormats
 {
     public interface IResourceType
     {
-        void Serialize(ushort version, Stream output);
-        void Deserialize(ushort version, Stream input);
+        void Serialize(ushort version, Stream output, Endian endian);
+        void Deserialize(ushort version, Stream input, Endian endian);
     }
 }

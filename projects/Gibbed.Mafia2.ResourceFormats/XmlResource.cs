@@ -35,16 +35,16 @@ namespace Gibbed.Mafia2.ResourceFormats
 
         public string Content;
 
-        public void Serialize(ushort version, Stream output)
+        public void Serialize(ushort version, Stream output, Endian endian)
         {
-            output.WriteStringU32(this.Tag);
+            output.WriteStringU32(this.Tag, endian);
 
             if (version >= 3)
             {
                 output.WriteValueU8((byte)(this.Unk1 ? 1 : 0));
             }
 
-            output.WriteStringU32(this.Name);
+            output.WriteStringU32(this.Name, endian);
 
             if (version >= 2)
             {
@@ -53,28 +53,28 @@ namespace Gibbed.Mafia2.ResourceFormats
 
             if (this.Unk3 == false)
             {
-                XmlResource0.Serialize(output, this.Content);
+                XmlResource0.Serialize(output, this.Content, endian);
             }
             else
             {
-                XmlResource1.Serialize(output, this.Content);
+                XmlResource1.Serialize(output, this.Content, endian);
             }
         }
 
-        public void Deserialize(ushort version, Stream input)
+        public void Deserialize(ushort version, Stream input, Endian endian)
         {
-            this.Tag = input.ReadStringU32();
-            this.Unk1 = (version >= 3) ? (input.ReadValueU8() != 0) : true;
-            this.Name = input.ReadStringU32();
-            this.Unk3 = (version >= 2) ? (input.ReadValueU8() != 0) : false;
+            this.Tag = input.ReadStringU32(endian);
+            this.Unk1 = version >= 3 ? input.ReadValueU8() != 0 : true;
+            this.Name = input.ReadStringU32(endian);
+            this.Unk3 = version >= 2 ? input.ReadValueU8() != 0 : false;
 
             if (this.Unk3 == false)
             {
-                this.Content = XmlResource0.Deserialize(input);
+                this.Content = XmlResource0.Deserialize(input, endian);
             }
             else
             {
-                this.Content = XmlResource1.Deserialize(input);
+                this.Content = XmlResource1.Deserialize(input, endian);
             }
         }
     }

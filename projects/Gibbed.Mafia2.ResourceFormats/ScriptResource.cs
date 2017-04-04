@@ -32,25 +32,25 @@ namespace Gibbed.Mafia2.ResourceFormats
         public string Path;
         public List<ScriptData> Scripts = new List<ScriptData>();
 
-        public void Serialize(ushort version, Stream output)
+        public void Serialize(ushort version, Stream output, Endian endian)
         {
-            output.WriteStringU16(this.Path);
-            output.WriteValueS32(this.Scripts.Count);
+            output.WriteStringU16(this.Path, endian);
+            output.WriteValueS32(this.Scripts.Count, endian);
             foreach (var script in this.Scripts)
             {
-                script.Serialize(version, output);
+                script.Serialize(version, output, endian);
             }
         }
 
-        public void Deserialize(ushort version, Stream input)
+        public void Deserialize(ushort version, Stream input, Endian endian)
         {
-            this.Path = input.ReadStringU16();
-            var count = input.ReadValueU32();
+            this.Path = input.ReadStringU16(endian);
+            var count = input.ReadValueU32(endian);
             this.Scripts.Clear();
             for (uint i = 0; i < count; i++)
             {
                 var script = new ScriptData();
-                script.Deserialize(version, input);
+                script.Deserialize(version, input, endian);
                 this.Scripts.Add(script);
             }
         }

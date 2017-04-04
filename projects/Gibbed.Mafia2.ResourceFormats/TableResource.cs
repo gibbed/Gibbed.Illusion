@@ -31,19 +31,19 @@ namespace Gibbed.Mafia2.ResourceFormats
     {
         public List<TableData> Tables = new List<TableData>();
 
-        public void Serialize(ushort version, Stream input)
+        public void Serialize(ushort version, Stream input, Endian endian)
         {
             throw new NotImplementedException();
         }
 
-        public void Deserialize(ushort version, Stream input)
+        public void Deserialize(ushort version, Stream input, Endian endian)
         {
-            uint count = input.ReadValueU32();
+            uint count = input.ReadValueU32(endian);
             this.Tables.Clear();
             for (uint i = 0; i < count; i++)
             {
                 var table = new TableData();
-                table.Deserialize(version, input);
+                table.Deserialize(version, input, endian);
                 this.Tables.Add(table);
             }
         }

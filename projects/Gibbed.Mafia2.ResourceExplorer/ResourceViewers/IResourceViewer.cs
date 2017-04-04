@@ -20,6 +20,7 @@
  *    distribution.
  */
 
+using Gibbed.IO;
 using ResourceEntry = Gibbed.Mafia2.FileFormats.Archive.ResourceEntry;
 
 namespace Gibbed.Mafia2.ResourceExplorer
@@ -29,6 +30,6 @@ namespace Gibbed.Mafia2.ResourceExplorer
         System.Windows.Forms.Form MdiParent { set; }
         void Show();
 
-        void LoadResource(ResourceEntry resourceEntry, string description);
+        void LoadResource(ResourceEntry resourceEntry, string description, Endian endian);
     }
 }

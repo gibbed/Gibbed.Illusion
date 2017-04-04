@@ -24,6 +24,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 using Be.Windows.Forms;
+using Gibbed.IO;
 using ResourceEntry = Gibbed.Mafia2.FileFormats.Archive.ResourceEntry;
 
 namespace Gibbed.Mafia2.ResourceExplorer
@@ -31,6 +32,7 @@ namespace Gibbed.Mafia2.ResourceExplorer
     public partial class RawViewer : Form, IResourceViewer
     {
         private ResourceEntry _ResourceEntry;
+        private Endian _Endian;
         private string _Description;
 
         public RawViewer()
@@ -39,9 +41,10 @@ namespace Gibbed.Mafia2.ResourceExplorer
             this._HexBox.ReadOnly = true;
         }
 
-        public void LoadResource(ResourceEntry resourceEntry, string description)
+        public void LoadResource(ResourceEntry resourceEntry, string description, Endian endian)
         {
             this._ResourceEntry = resourceEntry;
+            this._Endian = endian;
             this._Description = description;
             this.UpdatePreview();
             // ReSharper disable LocalizableElement
