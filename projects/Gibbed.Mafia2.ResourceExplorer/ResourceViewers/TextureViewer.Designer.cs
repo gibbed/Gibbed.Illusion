@@ -115,7 +115,7 @@
             this._ZoomButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this._ZoomButton.Name = "_ZoomButton";
             this._ZoomButton.Size = new System.Drawing.Size(23, 22);
-            this._ZoomButton.Text = "zoomButton";
+            this._ZoomButton.Text = "Toggle Zoom";
             this._ZoomButton.Click += new System.EventHandler(this.OnZoom);
             // 
             // _ToggleAlphaButton
