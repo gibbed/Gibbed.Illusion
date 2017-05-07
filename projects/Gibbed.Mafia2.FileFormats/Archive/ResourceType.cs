@@ -49,6 +49,11 @@ namespace Gibbed.Mafia2.FileFormats.Archive
             return instance;
         }
 
+        public override string ToString()
+        {
+            return string.Format("{0} = {1}", this.Id, this.Name);
+        }
+
         public bool Equals(ResourceType other)
         {
             return this.Id == other.Id &&
